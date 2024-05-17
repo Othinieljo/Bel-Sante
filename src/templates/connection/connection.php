@@ -15,7 +15,7 @@
     <section class="main">
         <div class="right"></div>
         <div class="left">
-            <form action="" method="">
+            <form action="/Bel-Sante/connect" method="post">
                 <h1 id="texteAnimé" class="gray" style="font-size: 2rem;"></h1>
                 <p>Veuillez vous connecter à votre page d'Administration</p>
                 <hr class="gray">
@@ -27,8 +27,9 @@
                     <label for="password">Mot de passe</label>
                     <input type="password" name="password">
                 </div>
-                <button type="button">Se connecter</button>
+                <button type="submit" name="login">Se connecter</button>
             </form>
+            <h2><?php echo htmlspecialchars($message); ?></h2>
         </div>
     </section>
 

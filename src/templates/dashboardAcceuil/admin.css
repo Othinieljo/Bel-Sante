@@ -6,10 +6,33 @@
     font-family: poppins;
     scroll-behavior: smooth;
 }
+
+.search_input{
+    position: relative;
+    cursor: text;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 0 16px;
+    height: 48px;
+    background-color: #fff;
+    border: 1px solid #d6d6e7;
+    border-radius: 3px;
+    color: rgb(35, 38, 59);
+    box-shadow: inset 0 1px 4px 0 rgb(119 122 175 / 30%);
+    overflow: hidden;
+    transition: all 100ms ease-in-out;
+    outline: none;
+}
+.search_input:focus {
+    border-color: #3c4fe0;
+    box-shadow: 0 1px 0 0 rgb(35 38 59 / 5%);
+}
+
 a{
     text-decoration: none;
     color: black;
 }
+
 .main{
     display: flex;
     width: 100%;
@@ -136,7 +159,7 @@ a{
     gap: 2rem;
     margin-top: 1rem;
 }
-.buttons button{
+.buttons button, .button{
     display: inline-block;
     outline: 0;
     appearance: none;
@@ -178,30 +201,7 @@ a{
     box-shadow: rgba(0, 0, 0, 0.075) 0px 2px 4px 0px;
 }
 
-.sc {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-}
-
-.stat {
-    margin-right: 20px;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.075) 0px 2px 4px 0px;
-}
-
-#calendar {
-    width: 400px;
-    height: 500px;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.075) 0px 2px 4px 0px;
-}
-
-.notifications{
+.notifications, .historique{
     background-color: white;
     padding: 20px;
     border-radius: 10px;
@@ -209,21 +209,28 @@ a{
     width: 100%;
     box-shadow: rgba(0, 0, 0, 0.075) 0px 2px 4px 0px;
 }
-
-.notifications table{
-    border-spacing: 5rem;
+.notifications div{
+    background-color: rgba(128, 128, 128, 0.12);    
+    padding: 10px;
+    color: green;
+    font-weight: 600;
+    margin-top: 1rem;
 }
-.notifications table .state{
+
+.historique table{
+    border-spacing: 4rem;
+}
+.historique table .state{
     display: flex;
     align-items: center;
     gap: 1rem;
 }
-.notifications table tr th,td{
+.historique table tr th,td{
     text-align: left;
 }
 
 
-#modal-1, #modal-2, #modal-3{
+#modal-1, #modal-2{
     display: none;
     position: fixed;
     z-index: 99999999;
@@ -258,6 +265,11 @@ a{
     cursor: pointer;
 }
 
+.dim{
+    width: 90%;
+    margin: auto;
+}
+
 .modal-content form .formulaire{
     display: flex;
     justify-content: space-evenly;
@@ -270,8 +282,6 @@ a{
 
 select,
 textarea,
-.modal-content form .formulaire input[type=file],
-.modal-content form .formulaire input[type=password],
 .modal-content form .formulaire input[type=text],
 .modal-content form .formulaire input[type=date],
 .modal-content form .formulaire input[type=email]{
@@ -306,9 +316,10 @@ textarea:hover{
 }
 
 .buttonForm{
-    position: fixed;
-    right: 9rem;
-    bottom: 7rem;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding: 3rem;
 }
 
 .buttonForm button{
@@ -325,7 +336,29 @@ textarea:hover{
     margin-left: 1rem;
 }
 
-.dim{
-    width: 90%;
-    margin: auto;
+.dossier{
+    background-color: white;
+    height: 77vh;
+    overflow-y: scroll;
+    padding: 1rem;
+}
+
+#consultationForm{
+    display: none;
+    border-bottom: 1px solid gray;
+}
+.h2-temporaire {
+    animation: affichageTemporaire 5s linear forwards;
+}
+
+@keyframes affichageTemporaire {
+    0% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
