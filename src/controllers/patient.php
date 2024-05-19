@@ -16,9 +16,31 @@ function patientpage(){
         switch($_SESSION['type']){
             case 'admin':
                 $user = new User();
+                $dossier = new Dossier();
+                $consultation = new Consultation();
                 try{
                     $user->connection = new DataBaseConnection();
                     $userAdmin = $user->GetUserByID($_SESSION['id_user']);
+                    $dossier->connection = new DataBaseConnection();
+                    $consultation->connection = new DataBaseConnection();
+                   $dossiers = $dossier->GetAllDossiers();
+                    foreach ($dossiers as &$dossier) {
+                        
+                        $consultationData = $consultation->GetConsultationByN($dossier['NUMERODOSSIER']);
+                        
+                        // Ajouter les colonnes de la consultation dans le tableau du dossier
+                        if ($consultationData) {
+                            $dossier['DIAGNOSTIC'] = $consultationData['DIAGNOSTIC'];
+                            $dossier['PRESCRIPTION'] = $consultationData['PRESCRIPTION'];
+                            $dossier['ACTEMEDICAL'] = $consultationData['ACTEMEDICAL'];
+                            $dossier['DATECONSULTATION'] = $consultationData['DATECONSULTATION'];
+                            $dossier['HEURECONSULTATION'] = $consultationData['HEURECONSULTATION'];
+                            $dossier['DATECONTROLE'] = $consultationData['DATECONTROLE'];
+                            $dossier['OBSERVATION'] = $consultationData['OBSERVATION'];
+                            $dossier['CONSTANTES'] = $consultationData['CONSTANTES'];
+                        }
+                    }
+                    unset($dossier);
 
                 }catch(Exception $e){
                     echo "Une nouvelle erreur est survenu".$e->getMessage();

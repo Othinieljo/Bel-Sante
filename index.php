@@ -27,7 +27,7 @@ switch ($path) {
     case '/Bel-Sante/login':
         connectionpage();
         break;
-    case '/Bel-Sante/dossier/get':
+    case '/Bel-Sante/dossiers':
         if (isset($_GET['n'])){
             $num_dossier = $_GET['n'];
             dossierpage($num_dossier);

@@ -65,17 +65,26 @@
                                 <th>Statut dossier</th>
                                 <th>Action</th>
                             </tr>
+                         
+                            <?php foreach($dossiers as $dossier) : ?>
                             <tr>
-                                <td>BAHILI</td>
-                                <td>Esli Ariel</td>
-                                <td>Treichville</td>
-                                <td>0777409491</td>
+                                <td><?php echo htmlspecialchars($dossier['NOM']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['PRENOM']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['HABITATION']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['CONTACT']); ?></td>
                                 <td class="state">
-                                    <img src="src/assets/icons/horloge.png" height="20px" width="20px" alt="">
-                                    <span>Ouvert</span>
+                                <?php if ($dossier['STATUT']) : ?>
+                                <img src="src/assets/icons/horloge.png" height="20px" width="20px" alt="">
+                                <span>Ouvert</span>
+                                <?php else : ?>
+                                <img src="src/assets/icons/verifier.png" height="20px" width="20px" alt="">
+                                <span>Fermé</span>
+                                <?php endif; ?>
                                 </td>
-                                <td><a href="dossier.php" title="Voir" ><img src="src/assets/icons/visuel.png" height="30px" width="30px" alt=""></a></td>
+
+                                <td><a href="/Bel-Sante/dossiers?n=<?php echo $dossier['NUMERODOSSIER'] ?>" title="Voir" ><img src="src/assets/icons/visuel.png" height="30px" width="30px" alt=""></a></td>
                             </tr>
+                            <?php endforeach; ?>
                         </table>
                         <p id="null"></p>
                     </div>

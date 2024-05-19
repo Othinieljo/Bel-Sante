@@ -145,7 +145,7 @@
                       <p>Fermé</p>
                     <?php endif; ?>
                   </td>
-                  <td><a href="/Bel-Sante/dossier/get?n=<?php echo $dossier['NUMERODOSSIER'] ?>"><img src="src/assets/icons/visuel.png" height="30px" width="30px" alt=""></a></td>
+                  <td><a href="/Bel-Sante/dossiers?n=<?php echo $dossier['NUMERODOSSIER'] ?>"><img src="src/assets/icons/visuel.png" height="30px" width="30px" alt=""></a></td>
                 </tr>
               <?php endfor; ?>
               <tr>
