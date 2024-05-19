@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="src/templates/dashboardAcceuil/admin.css">
+    <link rel="stylesheet" href="src/templates/dashboardAcceuil/admin.css" />
+    <link rel="shortcut icon" href="src/assets/logo.png" type="image/x-icon">
     <title>Accueil | bel'Santé</title>
 </head>
 <body>
@@ -16,18 +17,18 @@
             <div class="onglet">
                 <div style="cursor: pointer;">
                     <img src="src/assets/icons/dash.png" height="30px" alt="">
-                    <a href="admin.html">Dashbord</a>
+                    <a href="/Bel-Sante/admin">Dashbord</a>
                 </div>
                 <div>
                     <img src="src/assets/icons/patient.png" height="30px" alt="">
                     <a href="#"><u>Patients</u></a>
                 </div>
-                <div>
+                <!-- <div>
                     <img src="src/assets/icons/boite.png" height="30px" alt="">
                     <span>Contacts</span>
-                </div>
-
+                </div> -->
             </div>
+        </div>
         </div>
         <div class="dashbord">
             <div class="navbar">
@@ -35,7 +36,7 @@
                 </div>
                 <div class="user">
                     <div class="profil">
-                        <img src="src/assets/icons/user.png" height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
+                        <img src="<?php echo $userAcceuil['photourl']; ?>  height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
                         <p class="name"><b>ACCUEIL</b><br>dashbord</p>
                     </div>
                     <div class="deconnection">
@@ -46,43 +47,74 @@
                 </div>
             </div>
             <div class="dim">
-                <div class="buttons">
-                    <button class="openModal-1" onclick="openModal1()">Nouveau dossier +</button>
-                </div>
-                <input type="text" class="search_input" placeholder="Recherche...">
-                    <div class="historique">
+                    <div class="buttons">
+                        <button class="openModal-1" onclick="openModal1()">Nouveau dossier +</button>
+                    </div>
+                    <input type="text" class="search_input" style="margin-top: 1rem;" id="searchInput" placeholder="Recherche...">
+                    <div id="historique" class="historique">
                         <h3>Liste de tous les patients</h3>
-                        <table>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Prenoms</th>
-                                    <th>Lieu de résidence</th>
-                                    <th>Contact</th>
-                                    <th>Heure</th>
-                                    <th>Date</th>
-                                    <th>Statut dossier</th>
-                                    
-                                </tr>
-                                <?php foreach ($dossiers as $dossier) : ?>
-                                    <tr>
-                                    <td><?php echo htmlspecialchars($dossier['NOM']); ?></td>
-                                    <td><?php echo htmlspecialchars($dossier['PRENOM']); ?></td>
-                                    <td><?php echo htmlspecialchars($dossier['LIEUNAISSANCE']); ?></td>
-                                    <td><?php echo htmlspecialchars($dossier['CONTACT']); ?></td>
-                                    <td><?php echo date('H:i', strtotime($dossier['HEURECONSULTATION'])); ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($dossier['DATECONSULTATION'])); ?></td>
-                                    <td class="state">
-                                        <?php if ($dossier['STATUT']) : ?>
-                                        <img src="src/assets/icons/horloge.png" height="20px" width="20px" alt="">
-                                        <?php else : ?>
-                                        <img src="src/assets/icons/verifier.png" height="20px" width="20px" alt="">
-                                        <?php endif; ?>
+                        <table id="patientTable">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prenoms</th>
+                                <th>Lieu de résidence</th>
+                                <th>Contact</th>
+                                <th>Statut dossier</th>
+                                <th>Ouvrir le dossier</th>
+                            </tr>
+                            <?php foreach($dossiers as $dossier) : ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($dossier['NOM']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['PRENOM']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['HABITATION']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['CONTACT']); ?></td>
+                                <td class="state">
+                                <?php if ($dossier['STATUT']) : ?>
+                                <img src="src/assets/icons/horloge.png" height="20px" width="20px" alt="">
+                                <span>Ouvert</span>
+                                <?php else : ?>
+                                <img src="src/assets/icons/verifier.png" height="20px" width="20px" alt="">
+                                <span>Fermé</span>
+                                <?php endif; ?>
+                                </td>
 
-                                    </td>
-                                    
-                                    </tr>
-                                <?php endforeach; ?>
+                                <td>
+                                    <?php if ($dossier['STATUT']) : ?>
+                                    <i>Dossier en cours...</i>
+                                    <?php else : ?>
+                                        <div>
+                                        <form action='/Bel-Sante/newsc' method="post" style="display: flex;">
+                                           <input type="hidden" name="numerodossier" value="<?php echo $dossier['NUMERODOSSIER'] ?>">
+                                            <label for="specialiste">Spécialiste <span class="oblige">*</span></label><br>
+                                            <select name="specialiste" id="specialiste" required>
+                                                <option value="">Selectionner</option>
+                                                <?php
+                                                // Supposons que $specialistes est un tableau associatif contenant les données des spécialistes
+                                                foreach ($specialistes as $specialiste) {
+                                                    $idSpecialiste = htmlspecialchars($specialiste['IDSPECIALISTE']);
+                                                    $nomSpecialiste = htmlspecialchars($specialiste['NOMSPECIALISTE']);
+                                                    $prenomSpecialiste = htmlspecialchars($specialiste['PRENOMSPECIALISTE']);
+                                                    $specialiteSpecialiste = htmlspecialchars($specialiste['SPECIALITEDUSPECIALISTE']);
+                                                    $gradeSpecialiste = htmlspecialchars($specialiste['GRADESPECIALISTE']);
+
+                                                    // Générer l'option avec le nom, prénom et spécialité du spécialiste
+                                                    echo "<option value='$idSpecialiste'>$prenomSpecialiste $nomSpecialiste ($specialiteSpecialiste - $gradeSpecialiste)</option>";
+
+                                             }
+                                                ?>
+                                            </select>
+                                        
+                                        <input type="submit" value="Nouvelle consultation" style="border: none; padding: 10px; margin-left: 5px; height: 35px; border-radius: 10px; font-weight: 500;">
+                                        </form>
+                                        </div>
+                                    <?php endif; ?>    
+                                </td>
+
+                            </tr>
+                            <?php endforeach; ?>
+                            
                         </table>
+                        <p id="null"></p>
                     </div>
                 </div>
             </div>
@@ -100,53 +132,53 @@
                     <div class="">
                         <h3>Patient</h3>
                         <div>
-                            <label for="nom">Nom</label>
-                            <input type="text" name="nom">
+                            <label for="nom">Nom <span class="oblige">*</span></label>
+                            <input type="text" name="nom" required>
                         </div>
                         <div>
-                            <label for="prenoms">Prenoms</label>
-                            <input type="text" name="prenoms">
+                            <label for="prenom">Prenoms <span class="oblige">*</span></label>
+                            <input type="text" name="prenom" required>
                         </div>
                         <div>
-                            <label for="dtn">Date De Naissance</label>
-                            <input type="date" name="dtn">
+                            <label for="datenaissance">Date De Naissance <span class="oblige">*</span></label>
+                            <input type="date" name="datenaissance" required>
                         </div>
                         <div>
-                            <label for="lieuDeNaissance">Lieu De Naissance</label>
-                            <input type="text" name="lieuDeNaissance">
+                            <label for="lieudeNaissance">Lieu De Naissance <span class="oblige">*</span></label>
+                            <input type="text" name="lieunaissance" required>
                         </div>
                         <div>
                             <label for="sexe">Sexe</label><br>
-                            F <input type="radio" value="F" name="sexe">
-                            M <input type="radio" value="M" name="sexe">
+                            F <input type="radio" value="F" name="sexe" required>
+                            M <input type="radio" value="M" name="sexe" required>
                         </div>
                     </div>
                     
                     <div class="">
                         <h3>Information général</h3>
                         <div>
-                            <label for="profession">Profession</label>
-                            <input type="text" name="job">
+                            <label for="profession">Profession <span class="oblige">*</span></label>
+                            <input type="text" name="profession" required>
                         </div>
                         <div>
-                            <label for="contact">Contact</label>
-                            <input type="text" name="tel">
+                            <label for="contact">Contact <span class="oblige">*</span></label>
+                            <input type="text" name="contact" required>
                         </div>
                         <div>
                             <label for="email">Email</label>
                             <input type="email" name="email">
                         </div>
                         <div>
-                            <label for="habitation">Habitation</label>
-                            <input type="text" name="habitation">
+                            <label for="habitation">Habitation <span class="oblige">*</span></label>
+                            <input type="text" name="habitation" required>
                         </div>
                     </div>
                     
                     <div class="">
                         <h3>Informations médical</h3>
                         <div>
-                            <label for="gs">Groupe Sanguin</label><br>
-                            <select name="gs" id="">
+                            <label for="groupesanguin">Groupe Sanguin</label><br>
+                            <select name="groupesanguin" id="">
                                 <option value="">Choisir</option>
                                 <option value="A+">A+</option>
                                 <option value="A-">A-</option>
@@ -159,12 +191,13 @@
                             </select>
                         </div>
                         <div>
-                            <label for="antecedant">Antécédants</label><br>
-                            <textarea name="antecedant" style="height: 135px;" id=""></textarea>
+                            <label for="antecedants">Antécédants</label><br>
+                            <textarea name="antecedants" style="height: 135px;" id=""></textarea>
                         </div>
+                        
                         <div>
-                            <label for="specialiste">Spécialiste</label><br>
-                            <select name="specialiste" id="specialiste">
+                            <label for="specialiste">Spécialiste <span class="oblige">*</span></label><br>
+                            <select name="specialiste" id="specialiste" required>
                                 <option value="">Selectionner</option>
                                 <?php
                                 // Supposons que $specialistes est un tableau associatif contenant les données des spécialistes
@@ -186,15 +219,17 @@
                 <div class="buttonForm">
                     <div></div>
                     <div>
-                        <button class="submitButton" style="background: red;"><a href="/Bel-Sante/patient" style="color: white;">Annuler</a></button>
+                        <button class="submitButton" style="background: red;"><a href="/Bel-Sante/admin" style="color: white;">Annuler</a></button>
                         <button type="submit" style="background: rgb(2, 146, 2);">Enregistrer</button>
                     </div>
                 </div>
+                
             </form>
         </div>
+        <h2 class="h2-temporaire"><?php echo htmlspecialchars($dossier_status); ?></h2>
     </section>
 
-    <script>
+    <script type="text/javascript">
         function openModal1() {
             document.getElementById('modal-1').style.display = 'block';
         }
@@ -202,6 +237,36 @@
         function closeModal1() {
             document.getElementById('modal-1').style.display = 'none';
         }
+        const searchInput = document.getElementById('searchInput');
+        const patientTable = document.getElementById('patientTable');
+        const noMatchMessage = document.getElementById('null');
+
+        function filterPatients() {
+            const query = searchInput.value.trim().toLowerCase();
+            const rows = patientTable.getElementsByTagName('tr');
+            let matchFound = false;
+
+            for (let i = 0; i < rows.length; i++) {
+                const contactCell = rows[i].getElementsByTagName('td')[3];
+                if (contactCell) {
+                    const contact = contactCell.textContent.trim();
+                    const phoneNumber = contact.replace(/\D/g, '');
+                    const rowMatches = phoneNumber.includes(query);
+                    rows[i].style.display = rowMatches ? '' : 'none';
+                    if (rowMatches) {
+                        matchFound = true;
+                    }
+                }
+            }
+
+            if (!matchFound) {
+                noMatchMessage.textContent = "Aucun patient ne correspond au numéro entré";
+            } else {
+                noMatchMessage.textContent = "";
+            }
+        }
+
+        searchInput.addEventListener('input', filterPatients);
     </script>
 </body>
 </html>

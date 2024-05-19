@@ -14,13 +14,26 @@ function patientpage(){
             unset($_SESSION['dossier_status']); // Supprimer le message d'erreur de la session
         }
         switch($_SESSION['type']){
+            case 'admin':
+                $user = new User();
+                try{
+                    $user->connection = new DataBaseConnection();
+                    $userAdmin = $user->GetUserByID($_SESSION['id_user']);
 
+                }catch(Exception $e){
+                    echo "Une nouvelle erreur est survenu".$e->getMessage();
+                }
+                require('./src/templates/admin/patients.php');
+                break;
            
             case 'receptioniste':
                 $dossier = new Dossier();
                 $specialiste = new Specialiste();
                 $consultation = new Consultation();
+                $user = new User();
                 try{
+                    $user->connection = new DataBaseConnection();
+                    $userAcceuil = $user->GetUserByID($_SESSION['id_user']);
                     $dossier->connection = new DataBaseConnection();
                     $consultation->connection = new DataBaseConnection();
                     $dossiers = $dossier->GetAllDossiers();
@@ -48,16 +61,16 @@ function patientpage(){
                     echo "Une nouvelle erreur est survenu".$e->getMessage();
 
                 }
-
-               
-                
                 require('./src/templates/dashboardAcceuil/patients.php');
                 break;    
             case 'specialiste':
                 $participer = new Participer();
                 $dossier = new Dossier();
                 $consultation = new Consultation();
+                $user = new User();
                 try{
+                    $user->connection = new DataBaseConnection();
+                    $userSpe= $user->GetUserByID($_SESSION['id_user']);
                     $participer->connection = new DataBaseConnection();
                     $participers = $participer->GetParticipationsByUserId($_SESSION['id_user']);
                     $consultation->connection = new DataBaseConnection();
@@ -89,7 +102,10 @@ function patientpage(){
                 break;
             case 'service':
                 $service = new Service();
+                $user = new User();
                 try{
+                    $user->connection = new DataBaseConnection();
+                    $userServ = $user->GetUserByID($_SESSION['id_user']);
                     $service->connection = new DataBaseConnection();
                     $nbres_consultations = $service->CountNecessiterByUserId($_SESSION['id_user']);
 
@@ -97,7 +113,7 @@ function patientpage(){
                     echo "Une nouvelle erreur est survenu".$e->getMessage();
                 }
                 require('./src/templates/servicesExamenDashboard/patients.php');
-
+                break;
             default:
                 echo 'Page not found';
                 break;

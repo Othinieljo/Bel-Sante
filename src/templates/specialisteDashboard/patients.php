@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="src/templates/specialisteDashboard/admin.css">
-    <title>Accueil | bel'Santé</title>
+    <link rel="shortcut icon" href="src/assets/logo.png" type="image/x-icon">
+    <title>Spécialiste | bel'Santé</title>
 </head>
 <body>
     <section class="main">
@@ -34,7 +35,7 @@
                         <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt=""></a>
                     </div>
                     <div class="profil">
-                        <img src="src/assets/pp/IMG_6596.jpg" height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
+                        <img src=src=<?php echo $userSpe['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
                         <p class="name"><b>BAHILI</b><br>Esli Ariel</p>
                     </div>
                     <div class="deconnection">
@@ -45,21 +46,22 @@
                 </div>
             </div>
             <div class="dim">
-                <input type="text" style="margin-top: 1rem;" class="search_input" placeholder="Recherche...">
-                <div class="historique">
+                <input type="text" class="search_input" style="margin-top: 1rem;" id="searchInput" placeholder="Recherche...">
+                    <div id="historique" class="historique">
                         <h3>Liste de tous les patients</h3>
-                        <table>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Prenoms</th>
-                                    <th>Lieu de résidence</th>
-                                    <th>Contact</th>
-                                    <th>Heure</th>
-                                    <th>Date</th>
-                                    <th>Statut dossier</th>
-                                    <th>Action</th>
-                                </tr>
-                                <?php foreach ($dossiers as $dossier) : ?>
+                        <table id="patientTable">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prenoms</th>
+                                <th>Lieu de résidence</th>
+                                <th>Contact</th>
+                                <th>Heure</th>
+                                <th>Date</th>
+                                <th>Statut dossier</th>
+                                <th>Action</th>
+                            </tr>
+                            <?php foreach ($dossiers as $dossier) : ?>
+                                <?php if ($dossier['STATUT']) : ?>
                                     <tr>
                                     <td><?php echo htmlspecialchars($dossier['NOM']); ?></td>
                                     <td><?php echo htmlspecialchars($dossier['PRENOM']); ?></td>
@@ -70,19 +72,53 @@
                                     <td class="state">
                                         <?php if ($dossier['STATUT']) : ?>
                                         <img src="src/assets/icons/horloge.png" height="20px" width="20px" alt="">
+                                        <span>Ouvert</span>
                                         <?php else : ?>
                                         <img src="src/assets/icons/verifier.png" height="20px" width="20px" alt="">
+                                        <span>Fermé</span>
                                         <?php endif; ?>
-
                                     </td>
                                     <td><a href="/Bel-Sante/consult?n=<?php echo $dossier['NUMERODOSSIER']; ?>">Commencer la consultation</a></td>
                                     </tr>
-                                <?php endforeach; ?>
+                                    <?php endif; ?>
+                            <?php endforeach; ?>
                         </table>
+                        <p id="null"></p>
                     </div>
-                </div>
             </div>
         </div>
     </section>
+    <script type="text/javascript">
+        const searchInput = document.getElementById('searchInput');
+        const patientTable = document.getElementById('patientTable');
+        const noMatchMessage = document.getElementById('null');
+
+        function filterPatients() {
+            const query = searchInput.value.trim().toLowerCase();
+            const rows = patientTable.getElementsByTagName('tr');
+            let matchFound = false;
+
+            for (let i = 0; i < rows.length; i++) {
+                const contactCell = rows[i].getElementsByTagName('td')[3];
+                if (contactCell) {
+                    const contact = contactCell.textContent.trim();
+                    const phoneNumber = contact.replace(/\D/g, '');
+                    const rowMatches = phoneNumber.includes(query);
+                    rows[i].style.display = rowMatches ? '' : 'none';
+                    if (rowMatches) {
+                        matchFound = true;
+                    }
+                }
+            }
+
+            if (!matchFound) {
+                noMatchMessage.textContent = "Aucun patient ne correspond au numéro entré";
+            } else {
+                noMatchMessage.textContent = "";
+            }
+        }
+
+        searchInput.addEventListener('input', filterPatients);
+    </script>
 </body>
 </html>

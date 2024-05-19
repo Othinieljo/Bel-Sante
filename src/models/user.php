@@ -59,6 +59,13 @@ class User{
         
         return $result['total'];
     }
+    public function GetUserByID($id_user){
+        $stmt = $this->connection->getConnection()->prepare("SELECT * FROM user WHERE id_user = ?");
+        $stmt->execute([$id_user]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 }
 
 

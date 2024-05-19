@@ -21,15 +21,28 @@ class Consultation{
     public DataBaseConnection $connection;
 
     public function NewConsultation($NUMERODOSSIER,$DIAGNOSTIC,
-    $PRESCRIPTION,$ACTEMEDICAL,$DATECONSULTATION,$DATECONTROLE,$OBSERVATION,$CONSTANTES){
+    $PRESCRIPTION,$ACTEMEDICAL,$DATECONSULTATION,$HEURECONSULTATION,$DATECONTROLE,$OBSERVATION,$CONSTANTES){
         $stmt = $this->connection->getConnection()->prepare("INSERT INTO CONSULTATION
         (NUMERODOSSIER,DIAGNOSTIC,PRESCRIPTION,
-        ACTEMEDICAL,DATECONSULTATION,DATECONTROLE,OBSERVATION,CONSTANTES)
-        VALUES (?,?,?,?,?,?,?,?)  ");
+        ACTEMEDICAL,DATECONSULTATION,HEURECONSULTATION,DATECONTROLE,OBSERVATION,CONSTANTES)
+        VALUES (?,?,?,?,?,?,?,?,?)  ");
         $success = $stmt->execute([
         $NUMERODOSSIER,$DIAGNOSTIC,$PRESCRIPTION,
-        $ACTEMEDICAL,$DATECONSULTATION,
+        $ACTEMEDICAL,$DATECONSULTATION,$HEURECONSULTATION,
         $DATECONTROLE,$OBSERVATION,$CONSTANTES]);
+
+        if($success){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public function NewConsultationC($NUMERODOSSIER,$DATECONSULTATION,$HEURECONSULTATION){
+        $stmt = $this->connection->getConnection()->prepare("INSERT INTO CONSULTATION
+        (NUMERODOSSIER,DATECONSULTATION,HEURECONSULTATION)
+        VALUES (?,?,?)  ");
+        $success = $stmt->execute([
+        $NUMERODOSSIER,$DATECONSULTATION,$HEURECONSULTATION]);
 
         if($success){
             return true;
@@ -90,6 +103,19 @@ class Consultation{
     
         $stmt->execute([$NUMERODOSSIER, $NUMERODOSSIER]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result;
+    }
+    public function GetConsultationByNumero($NUMERODOSSIER){
+        $stmt = $this->connection->getConnection()->prepare("
+            SELECT *
+            FROM CONSULTATION
+            WHERE NUMERODOSSIER = ?
+            
+        ");
+    
+        $stmt->execute([$NUMERODOSSIER]);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         return $result;
     }

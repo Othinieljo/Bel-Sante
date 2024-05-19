@@ -74,6 +74,23 @@ public function GetDossiersByValue($fieldName, $fieldValue){
     
     return $result;
 }
+public function UpdateStatus($NUMERODOSSIER,$STATUT){
+    $stmt = $this->connection->getConnection()->prepare("
+    UPDATE DOSSIER
+    SET STATUT = ?
+    WHERE NUMERODOSSIER = ?
+    
+    "
+);
+$result = $stmt->execute([$STATUT,$NUMERODOSSIER]);
+if ($result){
+    return true;
+}else{
+    return false;
+}
+
+
+}
 
 
 

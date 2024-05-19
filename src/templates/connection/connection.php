@@ -27,9 +27,15 @@
                     <label for="password">Mot de passe</label>
                     <input type="password" name="password">
                 </div>
+                <?php
+                if (isset($message) && !empty($message)) {
+                    echo '
+                    <p style="background: #FF4747; color: white; padding: 10px; border-radius: 5px; font-weight: 700">' . htmlspecialchars($message) . '</p>
+                    ';
+                }
+                ?>
                 <button type="submit" name="login">Se connecter</button>
             </form>
-            <h2><?php echo htmlspecialchars($message); ?></h2>
         </div>
     </section>
 

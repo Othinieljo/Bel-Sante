@@ -11,6 +11,7 @@ require_once('src/controllers/admin.php');
 require_once('src/controllers/dossier.php');
 require_once('src/controllers/patient.php');
 require_once('src/controllers/consultation.php');
+require_once('src/controllers/specialistes.php');
 
 $message = '';
 
@@ -26,6 +27,15 @@ switch ($path) {
     case '/Bel-Sante/login':
         connectionpage();
         break;
+    case '/Bel-Sante/dossier/get':
+        if (isset($_GET['n'])){
+            $num_dossier = $_GET['n'];
+            dossierpage($num_dossier);
+        }
+        else{
+            header("Location : /bel-Sante/admin");
+        }
+        break;    
     case '/Bel-Sante/logout':
         deconnexionpage();
         break;    
@@ -68,7 +78,15 @@ switch ($path) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             NewServiceAndUser($_POST);
         }
-        break;           
+        break;
+    case '/Bel-Sante/newsc':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            AddConsultation($_POST);
+        }
+        break;    
+    case '/Bel-Sante/specialistes':
+        specialistePage();
+        break;
     default:
         header("Location: /Bel-Sante/admin");
         break;

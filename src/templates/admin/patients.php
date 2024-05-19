@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="src/templates/servicesExamenDashboard/admin.css">
+    <link rel="stylesheet" href="src/templates/admin/admin.css" />
     <link rel="shortcut icon" href="src/assets/logo.png" type="image/x-icon">
-    <title>Service Examen | bel'Santé</title>
+    <title>ADMINISTRATEUR | bel'Santé</title>
 </head>
 <body>
     <section class="main">
@@ -16,13 +16,18 @@
             </div>
             <div class="onglet">
                 <div style="cursor: pointer;">
-                    <img src="src/assets/icons/dash.png" height="30px" alt="">
+                    <img src="src/assets/icons/dash.png" height="30px" alt="" />
                     <a href="/Bel-Sante/admin">Dashbord</a>
                 </div>
                 <div>
-                    <img src="src/assets/icons/patient.png" height="30px" alt="">
+                    <img src="src/assets/icons/patient.png" height="30px" alt="" />
                     <a href="#"><u>Patients</u></a>
                 </div>
+                <div>
+                    <img src="src/assets/icons/docteur.png" height="30px" alt="" />
+                    <a href="/Bel-Sante/specialistes">Spécialistes</a>
+                </div>
+
             </div>
         </div>
         <div class="dashbord">
@@ -30,56 +35,55 @@
                 <div class="search">
                 </div>
                 <div class="user">
-                    <div class="notif" style="cursor: pointer;" title="10 Nouvelles notifications">
+                    <div class="notif" style="cursor: pointer" title="10 Nouvelles notifications">
                         <div class="news">10</div>
-                        <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt=""></a>
+                        <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt="" /></a>
                     </div>
                     <div class="profil">
-                        <img src=<?php echo $userServ['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
-                        <p class="name"><b>RADIOLOGIE</b><br>dashbord</p>
+                        <img src=<?php echo $userAdmin['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer" title="Connecté" />
+                        <p class="name">
+                        <b>ADMINISTRATEUR</b>
+                        </p>
                     </div>
                     <div class="deconnection">
                         <a href="/Bel-Sante/logout">
-                        <img src="src/assets/icons/se-deconnecter.png" height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Se déconnecter">
+                        <img src="src/assets/icons/se-deconnecter.png" height="50px" width="50px" style="border-radius: 50%; cursor: pointer" style="border-radius: 50%" title="Se déconnecter" />
                         </a>
                     </div>
                 </div>
             </div>
             <div class="dim">
-                <input type="text" class="search_input" style="margin-top: 1rem;" id="searchInput" placeholder="Recherche...">
-                    <div id="historique" class="historique">
+                    <input type="text" class="search_input" style="margin-top: 1rem;" id="searchInput" placeholder="Recherche...">
+                    <div id="notifications" class="notifications">
                         <h3>Liste de tous les patients</h3>
                         <table id="patientTable">
                             <tr>
                                 <th>Nom</th>
                                 <th>Prenoms</th>
+                                <th>Lieu de résidence</th>
                                 <th>Contact</th>
-                                <th>Libellé Examen</th>
-                                <th>Causes</th>
-                                <th>Résultats</th>
+                                <th>Statut dossier</th>
                                 <th>Action</th>
                             </tr>
                             <tr>
                                 <td>BAHILI</td>
                                 <td>Esli Ariel</td>
+                                <td>Treichville</td>
                                 <td>0777409491</td>
-                                <td>IRM</td>
-                                <td>Lorem ipsum dolor sit amet.</td>
-                                <form action="">
-                                <td>
-                                    <textarea name="" id="" cols="15"></textarea><br>
+                                <td class="state">
+                                    <img src="src/assets/icons/horloge.png" height="20px" width="20px" alt="">
+                                    <span>Ouvert</span>
                                 </td>
-                                <td>
-                                    <button type="submit" title="Envoie" style="background: none; border: none; cursor: pointer;" ><img src="src/assets/icons/envoyer.png" height="30px" alt=""></button>
-                                </td>
-                                </form>
+                                <td><a href="dossier.php" title="Voir" ><img src="src/assets/icons/visuel.png" height="30px" width="30px" alt=""></a></td>
                             </tr>
                         </table>
                         <p id="null"></p>
                     </div>
+                </div>
             </div>
         </div>
     </section>
+    
     <script type="text/javascript">
         const searchInput = document.getElementById('searchInput');
         const patientTable = document.getElementById('patientTable');
@@ -91,7 +95,7 @@
             let matchFound = false;
 
             for (let i = 0; i < rows.length; i++) {
-                const contactCell = rows[i].getElementsByTagName('td')[2];
+                const contactCell = rows[i].getElementsByTagName('td')[3];
                 if (contactCell) {
                     const contact = contactCell.textContent.trim();
                     const phoneNumber = contact.replace(/\D/g, '');

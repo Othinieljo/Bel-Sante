@@ -5,10 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="src/templates/admin/admin.css" />
+  <link rel="shortcut icon" href="src/assets/logo.png" type="image/x-icon">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
-  <title>Médécin | bel'Santé</title>
+
+  <title>ADMINISTRATEUR | bel'Santé</title>
 </head>
 
 <body>
@@ -21,15 +22,15 @@
       <div class="onglet">
         <div style="cursor: pointer">
           <img src="src/assets/icons/dash.png" height="30px" alt="" />
-          <span>Dashbord</span>
+          <a href="#"><u>Dashbord</u></a>
         </div>
         <div>
           <img src="src/assets/icons/patient.png" height="30px" alt="" />
-          <span>Patients</span>
+          <a href="/Bel-Sante/patient">Patients</a>
         </div>
         <div>
           <img src="src/assets/icons/docteur.png" height="30px" alt="" />
-          <span>Spécialistes</span>
+          <a href="/Bel-Sante/specialistes">Spécialistes</a>
         </div>
       </div>
     </div>
@@ -37,7 +38,7 @@
       <div class="navbar">
         <div class="search">
           <!--<img src="../assets/icons/recherche.png" height="30px" alt="">-->
-          <input type="text" placeholder="Recherche..." />
+          <!-- <input type="text" placeholder="Recherche..." /> -->
         </div>
         <div class="user">
           <div class="notif" style="cursor: pointer" title="10 Nouvelles notifications">
@@ -45,7 +46,7 @@
             <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt="" /></a>
           </div>
           <div class="profil">
-            <img src="src/assets/icons/user.png" height="50px" width="50px" style="border-radius: 50%; cursor: pointer" title="Connecté" />
+            <img src=<?php echo $userAdmin['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer" title="Connecté" />
             <p class="name">
               <b>ADMINISTRATEUR</b>
             </p>
@@ -59,9 +60,6 @@
       </div>
       <div class="dim">
         <div class="buttons">
-          <button class="openModal-1" onclick="openModal1()">
-            Patient +
-          </button>
           <button class="openModal-2" onclick="openModal2()">
             Médécin +
           </button>
@@ -116,142 +114,57 @@
 
             <div id="calendar"></div>
           </div>
-
           <div id="notifications" class="notifications">
             <h3>Ajout récent</h3>
             <table>
               <tr>
+                <th>Date</th>
+                <th>Heure</th>
                 <th>Nom</th>
                 <th>Prenoms</th>
                 <th>Lieu de résidence</th>
                 <th>Contact</th>
-                <th>Heure</th>
-                <th>Date</th>
                 <th>Statut dossier</th>
                 <th>Action</th>
               </tr>
-              <?php foreach ($dossiers as $dossier) : ?>
+              <?php for ($i = 0; $i < min(10, count($dossiers)); $i++) : ?>
+              <?php $dossier = $dossiers[$i]; ?>
                 <tr>
+                  <td><?php echo date('d/m/Y', strtotime($dossier['DATECONSULTATION'])); ?></td>
+                  <td><?php echo date('H:i', strtotime($dossier['HEURECONSULTATION'])); ?></td>
                   <td><?php echo htmlspecialchars($dossier['NOM']); ?></td>
                   <td><?php echo htmlspecialchars($dossier['PRENOM']); ?></td>
                   <td><?php echo htmlspecialchars($dossier['LIEUNAISSANCE']); ?></td>
                   <td><?php echo htmlspecialchars($dossier['CONTACT']); ?></td>
-                  <td><?php echo date('H:i', strtotime($dossier['HEURECONSULTATION'])); ?></td>
-                  <td><?php echo date('d/m/Y', strtotime($dossier['DATECONSULTATION'])); ?></td>
                   <td class="state">
                     <?php if ($dossier['STATUT']) : ?>
                       <img src="src/assets/icons/horloge.png" height="20px" width="20px" alt="">
+                      <p>Ouvert</p>
                     <?php else : ?>
                       <img src="src/assets/icons/verifier.png" height="20px" width="20px" alt="">
+                      <p>Fermé</p>
                     <?php endif; ?>
-
                   </td>
+                  <td><a href="/Bel-Sante/dossier/get?n=<?php echo $dossier['NUMERODOSSIER'] ?>"><img src="src/assets/icons/visuel.png" height="30px" width="30px" alt=""></a></td>
                 </tr>
-              <?php endforeach; ?>
+              <?php endfor; ?>
+              <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td><a href="/Bel-Sante/patient" style="color: blue;"><u>+ Voir plus</u></a></td>
+              </tr>
             </table>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <section id="modal-1" class="modal">
-    <div class="modal-content">
-      <div class="header">
-        <h1>AJOUT D'UN NOUVEAU DOSSIER</h1>
-        <span class="close" onclick="closeModal1()">&times;</span>
-      </div>
-
-      <form action="">
-        <div class="formulaire">
-          <div class="">
-            <h3>Patient</h3>
-            <div>
-              <label for="nom">Nom</label>
-              <input type="text" name="nom" />
-            </div>
-            <div>
-              <label for="prenoms">Prenoms</label>
-              <input type="text" name="prenoms" />
-            </div>
-            <div>
-              <label for="dtn">Date De Naissance</label>
-              <input type="date" name="dtn" />
-            </div>
-            <div>
-              <label for="lieuDeNaissance">Lieu De Naissance</label>
-              <input type="text" name="lieuDeNaissance" />
-            </div>
-            <div>
-              <label for="sexe">Sexe</label><br />
-              F <input type="radio" value="F" name="sexe" /> M
-              <input type="radio" value="M" name="sexe" />
-            </div>
-          </div>
-
-          <div class="">
-            <h3>Information général</h3>
-            <div>
-              <label for="profession">Profession</label>
-              <input type="text" name="job" />
-            </div>
-            <div>
-              <label for="contact">Contact</label>
-              <input type="text" name="tel" />
-            </div>
-            <div>
-              <label for="email">Email</label>
-              <input type="email" name="email" />
-            </div>
-            <div>
-              <label for="habitation">Habitation</label>
-              <input type="text" name="habitation" />
-            </div>
-          </div>
-
-          <div class="">
-            <h3>Informations médical</h3>
-            <div>
-              <label for="gs">Groupe Sanguin</label><br />
-              <select name="gs" id="">
-                <option value="">Choisir</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-              </select>
-            </div>
-            <div>
-              <label for="antecedant">Antécédants</label><br />
-              <textarea name="antecedant" style="height: 135px" id=""></textarea>
-            </div>
-            <div>
-              <label for="specialiste">Spécialiste</label><br />
-              <select name="specialiste" id="">
-                <option value="">Selectionner</option>
-                <option value="ID1">Ariel BAHILI (Neurologue)</option>
-                <option value="ID2">SOMAPKO Monan(Gynécologue)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="buttonForm">
-          <div></div>
-          <div>
-            <button class="submitButton" style="background: red">
-              <a href="admin.html" style="color: white">Annuler</a>
-            </button>
-            <button type="submit" style="background: rgb(2, 146, 2)">
-              Enregistrer
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </section>
+  
   <section id="modal-2" class="modal">
     <div class="modal-content">
       <div class="header">

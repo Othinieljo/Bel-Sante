@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="src/templates/specialisteDashboard/admin.css">
-    <title>Accueil | bel'Santé</title>
+    <link rel="shortcut icon" href="src/assets/logo.png" type="image/x-icon">
+    <title>Spécialiste | bel'Santé</title>
 </head>
 <body>
     <section class="main">
@@ -34,7 +35,7 @@
                         <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt=""></a>
                     </div>
                     <div class="profil">
-                        <img src="src/assets/pp/IMG_6596.jpg" height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
+                        <img src=<?php echo $userSpe['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
                         <p class="name"><b>BAHILI</b><br>Esli Ariel</p>
                     </div>
                     <div class="deconnection">
@@ -76,37 +77,52 @@
                     </div>
     
                     <div class="historique">
-                        <h3>Liste de tous les patients</h3>
+                        <h3>Ajout reçent</h3>
                         <table>
                                 <tr>
+                                    <th>Date</th>
+                                    <th>Heure</th>
                                     <th>Nom</th>
                                     <th>Prenoms</th>
                                     <th>Lieu de résidence</th>
                                     <th>Contact</th>
-                                    <th>Heure</th>
-                                    <th>Date</th>
                                     <th>Statut dossier</th>
                                     <th>Action</th>
                                 </tr>
-                                <?php foreach ($dossiers as $dossier) : ?>
+                                <?php for ($i = 0; $i < min(10, count($dossiers)); $i++) : ?>
+                                <?php $dossier = $dossiers[$i]; ?>
+                                    <?php if ($dossier['STATUT']) : ?>
                                     <tr>
+                                    <td><?php echo date('d/m/Y', strtotime($dossier['DATECONSULTATION'])); ?></td>
+                                    <td><?php echo date('H:i', strtotime($dossier['HEURECONSULTATION'])); ?></td>
                                     <td><?php echo htmlspecialchars($dossier['NOM']); ?></td>
                                     <td><?php echo htmlspecialchars($dossier['PRENOM']); ?></td>
                                     <td><?php echo htmlspecialchars($dossier['LIEUNAISSANCE']); ?></td>
                                     <td><?php echo htmlspecialchars($dossier['CONTACT']); ?></td>
-                                    <td><?php echo date('H:i', strtotime($dossier['HEURECONSULTATION'])); ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($dossier['DATECONSULTATION'])); ?></td>
                                     <td class="state">
                                         <?php if ($dossier['STATUT']) : ?>
                                         <img src="src/assets/icons/horloge.png" height="20px" width="20px" alt="">
+                                        <span>Ouvert</span>
                                         <?php else : ?>
                                         <img src="src/assets/icons/verifier.png" height="20px" width="20px" alt="">
+                                        <span>Fermé</span>
                                         <?php endif; ?>
 
                                     </td>
                                     <td><a href="/Bel-Sante/consult?n=<?php echo $dossier['NUMERODOSSIER']; ?>">Commencer la consultation</a></td>
+                                    <?php endif; ?>
                                     </tr>
-                                <?php endforeach; ?>
+                                <?php endfor; ?>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td><a href="/Bel-Sante/patient" style="color: blue;"><u>+ Voir plus</u></a></td>
+                                </tr>
                         </table>
                     </div>
                 </div>

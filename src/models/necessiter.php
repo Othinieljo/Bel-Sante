@@ -24,4 +24,9 @@ class Necessiter{
             return false;
         }
     }
+    public function GetNecessiterByConsultation($IDCONSULTATION){
+        $stmt = $this->connection->getConnection()->prepare("SELECT * FROM NECESSITER WHERE IDCONSULTATION = ?");
+        $stmt->execute([$IDCONSULTATION]);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
