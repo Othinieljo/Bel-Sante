@@ -85,35 +85,35 @@
                         <h3>Ajout réçent</h3>
                         <table style="border-spacing: 5rem;">
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Heure</th>
-                                    <th>Nom</th>
-                                    <th>Prenoms</th>
-                                    <th>Lieu de résidence</th>
-                                    <th>Contact</th>
-                                    <th>Statut dossier</th>
-                                    <th>Action</th>
+                                <th>Nom</th>
+                                <th>Prenoms</th>
+                                <th>Contact</th>
+                                <th>Libellé Examen</th>
+                                <th>Causes</th>
+                                <th>Résultats</th>
+                                <th>Action</th>
                                 </tr>
                                 <?php if ($dossiers) : ?>
                                 <?php for ($i = 0; $i < min(10, count($dossiers)); $i++) : ?>
                                 <?php $dossier = $dossiers[$i]; ?>
-                                    <tr>
-                                    <td><?php echo date('d/m/Y', strtotime($dossier['DATECONSULTATION'])); ?></td>
-                                    <td><?php echo date('H:i', strtotime($dossier['HEURECONSULTATION'])); ?></td>
-                                    <td><?php echo htmlspecialchars($dossier['NOM']); ?></td>
-                                    <td><?php echo htmlspecialchars($dossier['PRENOM']); ?></td>
-                                    <td><?php echo htmlspecialchars($dossier['LIEUNAISSANCE']); ?></td>
-                                    <td><?php echo htmlspecialchars($dossier['CONTACT']); ?></td>
-                                    <td class="state">
-                                        <?php if ($dossier['STATUT']) : ?>
-                                        <img src="src/assets/icons/horloge.png" height="20px" width="20px" alt="">
-                                        <?php else : ?>
-                                        <img src="src/assets/icons/verifier.png" height="20px" width="20px" alt="">
-                                        <?php endif; ?>
-
-                                    </td>
-                                    <td><a href="/Bel-Sante/consult?n=<?php echo $dossier['NUMERODOSSIER']; ?>">Commencer la consultation</a></td>
-                                    </tr>
+                                <?php if (empty($dossier['RESULTATS'])) : ?>
+                                <tr>
+                            <td><?php echo htmlspecialchars($dossier['NOM']); ?></td>
+                            <td><?php echo htmlspecialchars($dossier['PRENOM']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['CONTACT']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['LIBELLEEXAMCOMPL']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['CAUSEEXAMEN']); ?></td>
+                                <form action="/Bel-Sante/exam" method="post">
+                                <td>
+                                    <input type="hidden" name="consultation" value=<?php echo $dossier['IDCONSULTATION'] ?> >
+                                    <textarea name="resultats" id="" cols="15"></textarea><br>
+                                </td>
+                                <td>
+                                    <button  type="submit" title="Envoie" style="background: none; border: none; cursor: pointer;" ><img src="src/assets/icons/envoyer.png" height="30px" alt=""></button>
+                                </td>
+                                </form>
+                            </tr>
+                            <?php endif; ?>
                                 <?php endfor; ?>
                                 <?php endif; ?>
                                 <tr>
@@ -123,7 +123,7 @@
                                     <td>-</td>
                                     <td>-</td>
                                     <td>-</td>
-                                    <td>-</td>
+                                    
                                     <td><a href="/Bel-Sante/patient" style="color: blue;"><u>+ Voir plus</u></a></td>
                                 </tr>
                         </table>
@@ -139,11 +139,12 @@
                 <span class="close" onclick="closeModal4()">&times;</span>
             </div>
 
-            <form action="" method="post">
+            <form action="/Bel-Sante/exam/post" method="post">
                 <div>
                     <div class="exam">
                         <label for="exam">Libellé de l'examen <span class="oblige">*</span></label>
                         <input type="text" name="exam" required>
+                        <input type="hidden" name="idservice" value="<?php echo $serv['IDSERVICE'] ?>">
                     </div>
                     <div>
                         <button class="submitButton" href="/Bel-Sante/admin">

@@ -63,7 +63,17 @@ switch ($path) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             NewConsultation($_POST);
         }
-        break;        
+        break; 
+    case '/Bel-Sante/exam':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            PutNecessiter($_POST);
+        }
+        break; 
+    case '/Bel-Sante/exam/post':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            NewExam($_POST);
+        }
+        break;                
     case '/Bel-Sante/dossier':
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             NewDossier($_POST);

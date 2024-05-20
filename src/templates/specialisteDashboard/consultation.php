@@ -112,13 +112,13 @@
                 </div>
                 <h3 style="cursor: pointer; margin-bottom: 1rem; width:max-content;" onclick="showInfo()"><u>Carnet numérique du patient</u></h3>
                 <div id="informationDossier">
-                    <table>
+                <table>
                         <tr>
-                            <td colspan="9" ><b>Information sur le patient</b></td>
+                            <td colspan="9"><b>Information sur le patient</b></td>
                         </tr>
                         <tr style="font-weight: 500;">
                             <td>Nom</td>
-                            <td>Prenoms</td>
+                            <td>Prénoms</td>
                             <td>Sexe</td>
                             <td>Date de naissance</td>
                             <td>Lieu de naissance</td>
@@ -127,31 +127,36 @@
                             <td>Contact</td>
                             <td>Email</td>
                         </tr>
+                        <?php foreach ($results as $result) : ?>
                         <tr>
-                            <td>BAHILI</td>
-                            <td>ESLI ARIEL</td>
-                            <td>Masculin</td>
-                            <td>24/03/2002</td>
-                            <td>Abengourou</td>
-                            <td>Treichville</td>
-                            <td>Ingénier Génie Logiciel</td>
-                            <td>0777409491</td>
-                            <td>bahiliariel@gmail.com</td>
+                            <td><?php echo htmlspecialchars($result['NOM']); ?></td>
+                            <td><?php echo htmlspecialchars($result['PRENOM']); ?></td>
+                            <td><?php echo htmlspecialchars($result['SEXE']); ?></td>
+                            <td><?php echo htmlspecialchars($result['DATENAISSANCE']); ?></td>
+                            <td><?php echo htmlspecialchars($result['LIEUNAISSANCE']); ?></td>
+                            <td><?php echo htmlspecialchars($result['HABITATION']); ?></td>
+                            <td><?php echo htmlspecialchars($result['PROFESSION']); ?></td>
+                            <td><?php echo htmlspecialchars($result['CONTACT']); ?></td>
+                            <td><?php echo htmlspecialchars($result['EMAIL']); ?></td>
                         </tr>
                         <tr>
-                            <td colspan="9" ><b>Dossier</b></td>
+                            <td colspan="9"><b>Dossier</b></td>
                         </tr>
                         <tr style="font-weight: 500;">
-                            <td colspan="2" >Groupe Sanguin</td>
-                            <td colspan="7">Antécedant</td>
+                            <td colspan="2">Groupe sanguin</td>
+                            <td colspan="7">Antécédents</td>
                         </tr>
                         <tr>
-                            <td colspan="2" >A+</td>
-                            <td colspan="7">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, quibusdam beatae fugiat doloremque assumenda minima a laborum rerum iure aut!</td>
+                            <td colspan="2"><?php echo htmlspecialchars($result['GROUPESANGUIN']); ?></td>
+                            <td colspan="7"><?php echo htmlspecialchars($result['ANTECEDANTS']); ?></td>
                         </tr>
+                        <?php endforeach; ?>
+                        
                         <tr>
-                            <td colspan="9" ><b>Historique de consulation</b></td>
+                            <td colspan="9"><b>Historique de consultation</b></td>
                         </tr>
+                        
+                        
                         <tr style="font-weight: 500;">
                             <td>Date</td>
                             <td>Acte médical</td>
@@ -160,18 +165,20 @@
                             <td colspan="2">Diagnostic</td>
                             <td colspan="2">Prescription</td>
                         </tr>
-                        <!-- Boucle pour afficher les consultations que a effectué le patient -->
+                        <!-- Boucle pour afficher les consultations effectuées par le patient -->
+                        <?php foreach ($consultations as $consultation) : ?>
                         <tr>
-                            <td>17/05/2024</td>
-                            <td>Lorem ipsum dolor sit amet.</td>
-                            <td>Lorem ipsum dolor sit amet.</td>
-                            <td colspan="2">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, id.</td>
-                            <td colspan="2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, et.</td>
-                            <td colspan="2">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque, aut?</td>
+                            <td><?php echo date('d/m/Y', strtotime($consultation['DATECONSULTATION'])); ?></td>
+                            <td><?php echo htmlspecialchars($consultation['ACTEMEDICAL']); ?></td>
+                            <td><?php echo htmlspecialchars($consultation['CONSTANTES']); ?></td>
+                            <td colspan="2"><?php echo htmlspecialchars($consultation['OBSERVATION']); ?></td>
+                            <td colspan="2"><?php echo htmlspecialchars($consultation['DIAGNOSTIC']); ?></td>
+                            <td colspan="2"><?php echo htmlspecialchars($consultation['PRESCRIPTION']); ?></td>
                         </tr>
-
+                        
+                        <?php if (!empty($consultation['examen'])) : ?>
                         <tr>
-                            <td colspan="9" ><b>Historique d'examen</b></td>
+                            <td colspan="9"><b>Historique d'examen</b></td>
                         </tr>
                         <tr style="font-weight: 500;">
                             <td>Date</td>
@@ -179,13 +186,19 @@
                             <td colspan="2">Examen</td>
                             <td colspan="3">Résultats</td>
                         </tr>
-                        <!-- Boucle pour afficher les examens que a effectué le patient -->
+                        <!-- Boucle pour afficher les examens effectués par le patient -->
+                        <?php foreach ($consultation['examen'] as $examen) : ?>
+                        
                         <tr>
-                            <td>Le 18 janvier 1900 février</td>
-                            <td colspan="3">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti, velit?</td>
-                            <td colspan="2">Lorem ipsuting elit. Praesentium, voluptatum?</td>
-                            <td colspan="3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, sint.</td>
+                            <td><?php echo date('d/m/Y', strtotime($examen['DATE'])); ?></td>
+                            <td colspan="3"><?php echo htmlspecialchars($examen['CAUSES']); ?></td>
+                            <td colspan="2"><?php echo htmlspecialchars($examen['EXAMEN']); ?></td>
+                            <td colspan="3"><?php echo htmlspecialchars($examen['RESULTATS']); ?></td>
                         </tr>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+
                     </table>
                 </div>  
         </div>

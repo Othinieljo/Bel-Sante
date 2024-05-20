@@ -23,10 +23,34 @@ class Necessiter{
         }else{
             return false;
         }
+        
     }
     public function GetNecessiterByConsultation($IDCONSULTATION){
         $stmt = $this->connection->getConnection()->prepare("SELECT * FROM NECESSITER WHERE IDCONSULTATION = ?");
         $stmt->execute([$IDCONSULTATION]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+    public function UpdateNecessiterBy($IDCONSULTATION,$RESULTATS){
+
+        $stmt = $this->connection->getConnection()->prepare("
+        UPDATE NECESSITER 
+        SET RESULTATS = ?
+        
+        
+        WHERE IDCONSULTATION = ?"
+    
+    );
+        $result = $stmt->execute([$RESULTATS,$IDCONSULTATION]);
+
+        if ($result){
+            return true;
+        }else{
+            return false;
+        }
+
+        
+
     }
 }

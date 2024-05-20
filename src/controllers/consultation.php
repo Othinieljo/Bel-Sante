@@ -7,6 +7,13 @@ require_once('src/models/exam_comp.php');
 require_once('session.php');
 
 function NewConsultation(array $input){
+    ///// A jouter 
+    $dossier = new Dossier();
+
+
+
+    ///////
+    
     $idconsultation = $input['idconsultation'];
     $diagnostic = $input['diagnostic'] ?? '';
     $prescription = $input['prescription'] ?? ''; // Correction de la faute de frappe "precription" -> "prescription"
@@ -18,10 +25,11 @@ function NewConsultation(array $input){
     $numerodossier = $input['numerodossier']; 
     $consultation = new Consultation();
     try {
-       
+        $dossier->connection = new DataBaseConnection();
         $consultation->connection = new DataBaseConnection();
         $res = $consultation->UpdateConsultation($numerodossier,$diagnostic,$prescription,$acte_medical,$date_controle,$observation,$constantes);
         if ($res){
+            $dossier->UpdateStatus($numerodossier,0);
             if(!empty($examen_complementaire)){
                 $necessiter = new Necessiter();
                 try{
@@ -34,7 +42,7 @@ function NewConsultation(array $input){
                 }
 
             }
-            header("Location: /Bel-Sante/consult?n=".$numerodossier);
+            header("Location: /Bel-Sante/admin");
             
         }
 
@@ -54,6 +62,7 @@ function consultationpage($numerodossier){
 
     try{
         $participer->connection = new DataBaseConnection();
+        $dossier->connection = new DataBaseConnection();
         $dossiers = $participer->GetDossierByUserId($_SESSION['id_user']);
         $consultation->connection = new DataBaseConnection();
         $consult = $consultation->GetConsultationByN($numerodossier);
@@ -77,6 +86,18 @@ function consultationpage($numerodossier){
             $examen_complementaire = '';
             $date_controle = '';
             $observation = '';
+        }
+        $results = $dossier->GetDossiersByValue('NUMERODOSSIER',$numerodossier);
+        
+        $consultations = $consultation->GetConsultationByNumero($numerodossier);
+        $necessiter = new Necessiter();
+        $necessiter->connection = new DataBaseConnection();
+        
+       
+        foreach($consultations as $consult){
+            $consult['examen'] = $necessiter->GetNecessiterByConsultation($consult['IDCONSULTATION']);
+
+
         }
 
     }catch(Exception $e){

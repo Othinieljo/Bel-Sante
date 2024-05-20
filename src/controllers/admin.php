@@ -168,8 +168,8 @@ function adminpage(){
                     $service->connection = new DataBaseConnection();
                     $nbres_consultation = $service->CountNecessiterByUserId($_SESSION['id_user']);
                     $dossiers = $service->GetDossierByUserId($_SESSION['id_user']);
-                    
-
+                    $serv = $service->GetServiceByUserId($_SESSION['id_user']);
+                   
                 }catch(Exception $e){
                     echo "Une nouvelle erreur est survenu".$e->getMessage();
                 }

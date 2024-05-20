@@ -2,6 +2,7 @@
 require_once('src/models/dossier.php');
 require_once('src/models/user.php');
 require_once('src/models/necessiter.php');
+require_once('src/models/exam_comp.php');
 require_once('src/models/specialiste.php');
 require_once('src/models/consultation.php');
 require_once('src/models/participer.php');
@@ -118,4 +119,35 @@ function dossierpage($numerodossier){
     }
 
     require('src/templates/admin/dossier.php');
+}
+
+function PutNecessiter(array $input){
+    $idconsultation = $input['consultation'];
+    $resultats = $input['resultats'] ;
+
+    $necessiter = new Necessiter();
+    try{
+        $necessiter->connection = new DataBaseConnection();
+        $result = $necessiter->UpdateNecessiterBy($idconsultation,$resultats);
+
+    }
+    catch(Exception $e){
+        echo "Une nouvelle erreur est survenu".$e->getMessage();
+    }
+    header("Location: /Bel-Sante/patient");
+
+}
+function NewExam(array $input){
+    $idservice = $input['idservice'];
+    $examen = $input['exam'] ;
+
+    $exam = new EXAMENCOMPLEMENTAIRE();
+    try{
+        $exam->connection = new DataBaseConnection();
+        $exam->NewExamen($idservice,$examen);
+    }catch(Exception $e){
+        echo "Une nouvelle erreur est survenu".$e->getMessage();
+    }
+    header("Location: /Bel-Sante/admin");
+
 }

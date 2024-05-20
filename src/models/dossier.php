@@ -43,7 +43,7 @@ class Dossier {
     }
 }
 public function GetAllDossiers(){
-    $stmt = $this->connection->getConnection()->prepare("SELECT * FROM DOSSIER");
+    $stmt = $this->connection->getConnection()->prepare("SELECT * FROM DOSSIER ORDER BY NUMERODOSSIER DESC;");
      
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

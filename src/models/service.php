@@ -23,6 +23,14 @@ class Service{
         }
 
     }
+    public function GetServiceByUserId($id_user){
+        $stmt = $this->connection->getConnection()->prepare("
+        SELECT * FROM SERVICE WHERE id_user = ?
+        ");
+        $stmt->execute([$id_user]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
     public function GetNecessiterbyUserId($id_user) {
         $stmt = $this->connection->getConnection()->prepare("
             SELECT N.*,
@@ -82,7 +90,9 @@ class Service{
                    D.PRENOM,
                    D.CONTACT,
                    D.STATUT,
-                   D.LIEUNAISSANCE
+                   D.LIEUNAISSANCE,
+                   C.DATECONSULTATION,
+                   C.HEURECONSULTATION
             FROM NECESSITER N
             JOIN EXAMENCOMPLEMENTAIRE E 
                 ON N.IDEXAMENCOMPL= E.IDEXAMENCOMPL
@@ -97,6 +107,7 @@ class Service{
         
         $stmt->execute([$id_user]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
     
 

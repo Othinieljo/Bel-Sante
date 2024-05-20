@@ -59,21 +59,28 @@
                                 <th>Résultats</th>
                                 <th>Action</th>
                             </tr>
+                            <?php if (!empty($dossiers)) : ?>
+                            <?php foreach($dossiers as $dossier) : ?>
+                                <?php if (empty($dossier['RESULTATS'])) : ?>
                             <tr>
-                                <td>BAHILI</td>
-                                <td>Esli Ariel</td>
-                                <td>0777409491</td>
-                                <td>IRM</td>
-                                <td>Lorem ipsum dolor sit amet.</td>
-                                <form action="">
+                            <td><?php echo htmlspecialchars($dossier['NOM']); ?></td>
+                            <td><?php echo htmlspecialchars($dossier['PRENOM']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['CONTACT']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['LIBELLEEXAMCOMPL']); ?></td>
+                                <td><?php echo htmlspecialchars($dossier['CAUSEEXAMEN']); ?></td>
+                                <form action="/Bel-Sante/exam" method="post">
                                 <td>
-                                    <textarea name="" id="" cols="15"></textarea><br>
+                                    <input type="hidden" name="consultation" value=<?php echo $dossier['IDCONSULTATION'] ?> >
+                                    <textarea name="resultats" id="" cols="15"></textarea><br>
                                 </td>
                                 <td>
                                     <button type="submit" title="Envoie" style="background: none; border: none; cursor: pointer;" ><img src="src/assets/icons/envoyer.png" height="30px" alt=""></button>
                                 </td>
                                 </form>
                             </tr>
+                            <?php endif; ?>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
                         </table>
                         <p id="null"></p>
                     </div>

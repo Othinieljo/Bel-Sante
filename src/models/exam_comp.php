@@ -18,7 +18,7 @@ class EXAMENCOMPLEMENTAIRE{
     }
     public function NewExamen($IDSERVICE,$LIBELLEEXAM){
         $stmt = $this->connection->getConnection()->prepare(
-            "INSERT INTO EXAMENCOMPLEMENTAIRE (IDSERVICE, LIBELLEEXAM) 
+            "INSERT INTO EXAMENCOMPLEMENTAIRE (IDSERVICE, LIBELLEEXAMCOMPL) 
             VALUES (?, ?)"
         );
         
