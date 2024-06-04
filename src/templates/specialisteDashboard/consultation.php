@@ -35,8 +35,8 @@
                         <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt=""></a>
                     </div>
                     <div class="profil">
-                        <img src="src/assets/pp/IMG_6596.jpg" height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
-                        <p class="name"><b>BAHILI</b><br>Esli Ariel</p>
+                        <img src=<?php echo $url?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
+                        <p class="name"><b><?php echo $specialiste['NOMSPECIALISTE'] ?></b><br><?php echo $specialiste['PRENOMSPECIALISTE'] ?></p>
                     </div>
                     <div class="deconnection">
                         <a href="/Bel-Sante/logout">
@@ -51,7 +51,7 @@
             </div>
             
             <div class="dim dossier">
-                <h3 id="consulation" style="cursor: pointer; margin-bottom: 1rem; width:max-content;" onclick="showConsultation()"><u>Consulation</u></h3>
+                <h3 id="consulation" style="cursor: pointer; margin-bottom: 1rem; width:max-content;" onclick="showConsultation()"><u>Consultation</u></h3>
                 <div id="consultationForm">
                     <form action="/Bel-Sante/consultation" method="post">
                         <input type="hidden" name="idconsultation" value="<?php echo $idconsultation; ?>">
@@ -85,10 +85,13 @@
                                         <option value="">Sélectionner</option>
                                         <?php
                                         foreach ($exam_comps as $examen) {
+                                            
                                             echo '<option value="' . $examen['IDEXAMENCOMPL'] . '"';
+                                            
                                             
 
                                             echo '>' . $examen['LIBELLEEXAMCOMPL'] . '</option>';
+                                            
                                         }
                                         ?>
                                     </select>
@@ -99,7 +102,7 @@
                             </tr>
                             <tr>
                                 <td>Observation</td>
-                                <td>Date de control</td>
+                                <td>Date de controle</td>
                                 <td></td>
                             </tr>
                             <tr>

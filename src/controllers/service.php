@@ -29,13 +29,13 @@ function NewServiceAndUser(array $input){
                     }
 
                 }catch(Exception $i){
-                    echo "Une nouvelle erreur est survenu".$i->getMessage();
+                    // echo "Une nouvelle erreur est survenu".$i->getMessage();
                 }
                 
             }
 
         }catch(Exception $e){
-            echo 'Une nouvelle erreur est survenu est'.$e->getMessage();
+            // echo 'Une nouvelle erreur est survenu est'.$e->getMessage();
         }
 
     }else{

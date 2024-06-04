@@ -5,6 +5,7 @@ require_once('src/controllers/user.php');
 require_once('src/models/specialiste.php');
 require_once('src/models/dossier.php');
 require_once('src/models/participer.php');
+require_once('src/models/notification.php');
 require_once('src/models/service.php');
 require_once('src/models/user.php');
 
@@ -22,17 +23,22 @@ function adminpage(){
                 $dossier = new Dossier();
                 $user = new User();
                 $consultation = new Consultation();
+                $notification = new Notification();
+               
 
                 try{
                     $user->connection = new DataBaseConnection();
                     $dossier->connection = new DataBaseConnection();
                     $consultation->connection = new DataBaseConnection();
+                    $notification->connection = new DataBaseConnection();
                     $nbres_dossier = $dossier->CountDossiers();
                     $nbres_user = $user->CountNonAdminUsers();
                     $nbres_consultation = $consultation->CountConsultations();
                     $nbres_rdv = $consultation->CountConsultationsByActualDate();
                     $dossiers = $dossier->GetAllDossiers();
                     $userAdmin = $user->GetUserByID($_SESSION['id_user']);
+                    $notif = $notification->CountNotificationsNotS($_SESSION['id_user']);
+
 
 
                     $year = date('Y'); // Obtenez l'année actuelle
@@ -64,12 +70,17 @@ function adminpage(){
                             $dossier['DATECONTROLE'] = $consultationData['DATECONTROLE'];
                             $dossier['OBSERVATION'] = $consultationData['OBSERVATION'];
                             $dossier['CONSTANTES'] = $consultationData['CONSTANTES'];
+
+
+                            $IDCONSULTATION = $consultationData['IDCONSULTATION'];
+                            $necessiterExists = $consultation->checkNecessiterByIDCONSULTATION($IDCONSULTATION);
+                            $dossier['NECESSITER_EXISTS'] = $necessiterExists;
                         }
                     }
                     unset($dossier);
 
                 }catch(Exception $e){
-                    echo "Une nouvelle erreur est survenu".$e->getMessage();
+                    // echo "Une nouvelle erreur est survenu".$e->getMessage();
                 }
                 require('./src/templates/admin/admin.php');
                 break;
@@ -87,7 +98,7 @@ function adminpage(){
                     $user->connection = new DataBaseConnection();
                     $userAcceuil = $user->GetUserByID($_SESSION['id_user']);
                     $dossier->connection = new DataBaseConnection();
-                    $dossiers = $dossier->GetAllDossiers();
+                    $dossiers = $dossier->GetAllDossiersAndConsult();
                     $consultation->connection = new DataBaseConnection();
                     $nbres_rdv = $consultation->CountConsultationsByActualDate();
                     $participer->connection = new DataBaseConnection();
@@ -97,25 +108,28 @@ function adminpage(){
                     $specialiste->connection = new DataBaseConnection();
                     $specialistes = $specialiste->AllSpecialiste();
                     foreach ($dossiers as &$dossier) {
+                        $IDCONSULTATION = $dossier['IDCONSULTATION'];
+                        $necessiterExists = $consultation->checkNecessiterByIDCONSULTATION($IDCONSULTATION);
+                        $dossier['NECESSITER_EXISTS'] = $necessiterExists;
                         
-                        $consultationData = $consultation->GetConsultationByN($dossier['NUMERODOSSIER']);
+                        // $consultationData = $consultation->GetConsultationByN($dossier['NUMERODOSSIER']);
                         
-                        // Ajouter les colonnes de la consultation dans le tableau du dossier
-                        if ($consultationData) {
-                            $dossier['DIAGNOSTIC'] = $consultationData['DIAGNOSTIC'];
-                            $dossier['PRESCRIPTION'] = $consultationData['PRESCRIPTION'];
-                            $dossier['ACTEMEDICAL'] = $consultationData['ACTEMEDICAL'];
-                            $dossier['DATECONSULTATION'] = $consultationData['DATECONSULTATION'];
-                            $dossier['HEURECONSULTATION'] = $consultationData['HEURECONSULTATION'];
-                            $dossier['DATECONTROLE'] = $consultationData['DATECONTROLE'];
-                            $dossier['OBSERVATION'] = $consultationData['OBSERVATION'];
-                            $dossier['CONSTANTES'] = $consultationData['CONSTANTES'];
-                        }
+                        // // Ajouter les colonnes de la consultation dans le tableau du dossier
+                        // if ($consultationData) {
+                        //     $dossier['DIAGNOSTIC'] = $consultationData['DIAGNOSTIC'];
+                        //     $dossier['PRESCRIPTION'] = $consultationData['PRESCRIPTION'];
+                        //     $dossier['ACTEMEDICAL'] = $consultationData['ACTEMEDICAL'];
+                        //     $dossier['DATECONSULTATION'] = $consultationData['DATECONSULTATION'];
+                        //     $dossier['HEURECONSULTATION'] = $consultationData['HEURECONSULTATION'];
+                        //     $dossier['DATECONTROLE'] = $consultationData['DATECONTROLE'];
+                        //     $dossier['OBSERVATION'] = $consultationData['OBSERVATION'];
+                        //     $dossier['CONSTANTES'] = $consultationData['CONSTANTES'];
+                        // }
                     }
                     unset($dossier);
                     
                 }catch(Exception $e){
-                    echo "Une nouvelle erreur".$e->getMessage();
+                    // echo "Une nouvelle erreur".$e->getMessage();
                 }
                 
                 require('./src/templates/dashboardAcceuil/admin.php');
@@ -125,17 +139,28 @@ function adminpage(){
                 $dossier = new Dossier();
                 $consultation = new Consultation();
                 $user = new User();
+                $userS = new Specialiste();
+                $notification = new Notification();
                 try{
                     $user->connection = new DataBaseConnection();
                     $userSpe= $user->GetUserByID($_SESSION['id_user']);
+                    $userS->connection = new DataBaseConnection();
+                    $specialiste = $userS->GetSpecialisteByUserId($_SESSION['id_user']);
+
+                    $urlComplet = $userSpe['photourl'];
+                    $url = str_replace("/opt/lampp/htdocs/Bel-Sante/", "", $urlComplet);
+                    
                     $participer->connection = new DataBaseConnection();
                     $participers = $participer->GetParticipationsByUserId($_SESSION['id_user']);
                     $nbres_p = $participer->CountConsultationsTodayByUserId($_SESSION['id_user']);
                     $nbres_rdv = $participer->CountConsultationsTodayByUserIdAndControlDate($_SESSION['id_user']);
                     $new_d = $participer->CountNewConsultationsToday();
                     $consultation->connection = new DataBaseConnection();
+                    $notification->connection = new DataBaseConnection();
+                    $notif = $notification->CountNotificationsNotS($_SESSION['id_user']);
                     
                     $dossiers = $participer->GetDossierByUserId($_SESSION['id_user']);
+                    $notification->CountNotificationsNotS($_SESSION['id_user']);
                     foreach ($dossiers as &$dossier) {
                         
                         $consultationData = $consultation->GetConsultationByN($dossier['NUMERODOSSIER']);
@@ -155,23 +180,30 @@ function adminpage(){
                     unset($dossier);
 
                 }catch(Exception $e){
-                    echo "Une nouvelle erreur esr survenu".$e->getMessage();
-                }               
+                    // echo "Une nouvelle erreur esr survenu".$e->getMessage();
+                }
+                            
                 require('./src/templates/specialisteDashboard/admin.php');
                 break;
             case 'service':
                 $service = new Service();
                 $user = new User();
+                $notification = new Notification();
                 try{
                     $user->connection = new DataBaseConnection();
                     $userServ= $user->GetUserByID($_SESSION['id_user']);
+                    $notification->connection = new DataBaseConnection();
+                    $urlComplet = $userServ['photourl'];
+                    $url = str_replace("/opt/lampp/htdocs/Bel-Sante/", "", $urlComplet);
                     $service->connection = new DataBaseConnection();
                     $nbres_consultation = $service->CountNecessiterByUserId($_SESSION['id_user']);
                     $dossiers = $service->GetDossierByUserId($_SESSION['id_user']);
                     $serv = $service->GetServiceByUserId($_SESSION['id_user']);
+                    $notif = $notification->CountNotificationsNotS($_SESSION['id_user']);
+                    
                    
                 }catch(Exception $e){
-                    echo "Une nouvelle erreur est survenu".$e->getMessage();
+                    // echo "Une nouvelle erreur est survenu".$e->getMessage();
                 }
                 require('./src/templates/servicesExamenDashboard/admin.php');
                 break;

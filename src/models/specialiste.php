@@ -38,4 +38,18 @@ class Specialiste{
         return $result;
         
     }
+    public function GetSpecialisteByUserId($id_user){
+        $stmt = $this->connection->getConnection()->prepare("SELECT * FROM SPECIALISTE WHERE id_user = ?");
+         
+        $stmt->execute([$id_user]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    public function GetSpecialisteBySpe($IDSPECIALISTE){
+        $stmt = $this->connection->getConnection()->prepare("SELECT * FROM SPECIALISTE WHERE IDSPECIALISTE = ?");
+         
+        $stmt->execute([$IDSPECIALISTE]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

@@ -21,7 +21,7 @@
                 </div>
                 <div>
                     <img src="src/assets/icons/patient.png" height="30px" alt="Patients Icon" />
-                    <a href="#"><u>Patients</u></a>
+                    <a href="/Bel-Sante/patient"><u>Patients</u></a>
                 </div>
                 <div>
                     <img src="src/assets/icons/docteur.png" height="30px" alt="Docteur Icon" />
@@ -39,7 +39,7 @@
                         <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt="Notification Icon" /></a>
                     </div>
                     <div class="profil">
-                        <img src=<?php echo $userAdmin['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer" title="Connecté" />
+                        <img src="src/assets/logo.png" height="50px" width="50px" style="border-radius: 50%; cursor: pointer" title="Connecté" />
                         <p class="name">
                             <b>ADMINISTRATEUR</b>
                         </p>

@@ -64,8 +64,7 @@ class Consultation{
         WHERE NUMERODOSSIER = ?
     ");
 
-    $success = $stmt->execute([ $DIAGNOSTIC, $PRESCRIPTION,
-        $ACTEMEDICAL,  $DATECONTROLE, $OBSERVATION,$CONSTANTES,$NUMERODOSSIER]);
+    $success = $stmt->execute([$DIAGNOSTIC,$PRESCRIPTION,$ACTEMEDICAL,$DATECONTROLE,$OBSERVATION,$CONSTANTES,$NUMERODOSSIER]);
 
     if ($success) {
         return true; // Mise à jour réussie
@@ -106,11 +105,25 @@ class Consultation{
         
         return $result;
     }
+    public function checkNecessiterByIDCONSULTATION($IDCONSULTATION) {
+        $stmt = $this->connection->getConnection()->prepare("
+            SELECT COUNT(*) as count
+            FROM NECESSITER
+            WHERE IDCONSULTATION = ?
+        ");
+        
+        $stmt->execute([$IDCONSULTATION]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['count'] > 0;
+    }
+    
     public function GetConsultationByNumero($NUMERODOSSIER){
         $stmt = $this->connection->getConnection()->prepare("
             SELECT *
-            FROM CONSULTATION
+            FROM CONSULTATION 
             WHERE NUMERODOSSIER = ?
+            ORDER BY IDCONSULTATION DESC;
             
         ");
     
@@ -119,6 +132,24 @@ class Consultation{
         
         return $result;
     }
+    public function GetConsultationByIDCONSULTATION($IDCONSULTATION) {
+        $stmt = $this->connection->getConnection()->prepare("
+            SELECT C.*, D.*, P.*, S.*
+            FROM CONSULTATION C
+            JOIN DOSSIER D ON C.NUMERODOSSIER = D.NUMERODOSSIER
+            JOIN PARTICIPER P ON C.IDCONSULTATION = P.IDCONSULTATION
+            JOIN SPECIALISTE S ON P.IDSPECIALISTE = S.IDSPECIALISTE
+            WHERE C.IDCONSULTATION = ?
+            
+        ");
+        
+        $stmt->execute([$IDCONSULTATION]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result;
+    }
+    
+    
     public function CountConsultations(){
         $stmt = $this->connection->getConnection()->prepare("SELECT COUNT(*) as total FROM CONSULTATION");
          
@@ -145,7 +176,7 @@ class Consultation{
         
         $stmt = $this->connection->getConnection()->prepare("
             SELECT *
-            FROM CONSULTATION
+            FROM CONSULTATION ORDER BY IDCONSULTATION DESC
             WHERE DATECONTROLE >= ?
         ");
     

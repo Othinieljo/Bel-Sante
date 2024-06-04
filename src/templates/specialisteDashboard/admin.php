@@ -31,12 +31,12 @@
                 </div>
                 <div class="user">
                     <div class="notif" style="cursor: pointer;" title="10 Nouvelles notifications">
-                        <div class="news">10</div>
-                        <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt=""></a>
+                        <div class="news"><?php echo $notif ?></div>
+                        <a href="/Bel-Sante/notification"><img src="src/assets/icons/notification.png" height="30px" alt=""></a>
                     </div>
                     <div class="profil">
-                        <img src=<?php echo $userSpe['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
-                        <p class="name"><b>BAHILI</b><br>Esli Ariel</p>
+                        <img src=<?php echo $url?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
+                        <p class="name"><b><?php echo $specialiste['NOMSPECIALISTE'] ?></b><br><?php echo $specialiste['PRENOMSPECIALISTE'] ?></p>
                     </div>
                     <div class="deconnection">
                         <a href="/Bel-Sante/logout">
@@ -71,10 +71,10 @@
                         </div>
                     </div>  
                     
-                    <div class="notifications">
+                    <!-- <div class="notifications">
                         <h3>Notifications</h3>
                         <div>Nouvelle consultation ajoutée</div>
-                    </div>
+                    </div> -->
     
                     <div class="historique">
                         <h3>Ajout reçent</h3>

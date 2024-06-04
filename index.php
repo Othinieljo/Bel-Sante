@@ -7,11 +7,13 @@ error_reporting(E_ALL);
 
 require_once('src/controllers/user.php');
 require_once('src/controllers/service.php');
+require_once('src/controllers/impression.php');
 require_once('src/controllers/admin.php');
 require_once('src/controllers/dossier.php');
 require_once('src/controllers/patient.php');
 require_once('src/controllers/consultation.php');
 require_once('src/controllers/specialistes.php');
+require_once('src/controllers/notification.php');
 
 $message = '';
 
@@ -93,16 +95,37 @@ switch ($path) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             AddConsultation($_POST);
         }
-        break;    
+        break;
+    case '/Bel-Sante/printexam':
+        if (isset($_GET['n'])){
+            $id_consult = $_GET['n'];
+            printexampage($id_consult);
+        }
+        else{
+            header("Location : /bel-Sante/admin");
+        }
+        
+        break;
+    case '/Bel-Sante/printconsult':
+        if (isset($_GET['n'])){
+            $id_consult = $_GET['n'];
+            printconsultpage($id_consult);
+        }
+        else{
+            header("Location : /bel-Sante/admin");
+        }
+       
+        break;           
     case '/Bel-Sante/specialistes':
         specialistePage();
         break;
+    case '/Bel-Sante/notifications':
+        notificationPage();
+        break;    
     default:
         header("Location: /Bel-Sante/admin");
         break;
 }
-
-    
 
 } catch (Exception $e) {
     // Capturer l'erreur et afficher un message personnalisé

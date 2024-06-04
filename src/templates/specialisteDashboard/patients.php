@@ -35,8 +35,8 @@
                         <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt=""></a>
                     </div>
                     <div class="profil">
-                        <img src=src=<?php echo $userSpe['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
-                        <p class="name"><b>BAHILI</b><br>Esli Ariel</p>
+                        <img src=<?php echo $url?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
+                        <p class="name"><b><?php echo $specialiste['NOMSPECIALISTE'] ?></b><br><?php echo $specialiste['PRENOMSPECIALISTE'] ?></p>
                     </div>
                     <div class="deconnection">
                         <a href="/Bel-Sante/logout">

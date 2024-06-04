@@ -35,8 +35,8 @@
                         <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt=""></a>
                     </div>
                     <div class="profil">
-                        <img src=<?php echo $userServ['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
-                        <p class="name"><b>RADIOLOGIE</b><br>dashbord</p>
+                        <img src="src/assets/logo.png" height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
+                        <p class="name"><b><?php echo $serv['NOMSERVICE'] ?></b><br>dashbord</p>
                     </div>
                     <div class="deconnection">
                         <a href="/Bel-Sante/logout">

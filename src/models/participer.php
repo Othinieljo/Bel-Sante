@@ -50,18 +50,21 @@ class Participer{
     }
     public function GetDossierByUserId($id_user){
         $stmt = $this->connection->getConnection()->prepare("
-        SELECT D.*
-        FROM PARTICIPER P
-        JOIN SPECIALISTE S ON P.IDSPECIALISTE = S.IDSPECIALISTE
-        JOIN CONSULTATION C ON P.IDCONSULTATION = C.IDCONSULTATION
-        JOIN DOSSIER D ON C.NUMERODOSSIER = D.NUMERODOSSIER
-        WHERE S.id_user = ?");
+            SELECT DISTINCT D.*
+            FROM PARTICIPER P 
+            JOIN SPECIALISTE S ON P.IDSPECIALISTE = S.IDSPECIALISTE
+            JOIN CONSULTATION C ON P.IDCONSULTATION = C.IDCONSULTATION
+            JOIN DOSSIER D ON C.NUMERODOSSIER = D.NUMERODOSSIER
+            WHERE S.id_user = ?
+            ORDER BY P.IDPARTICIPER DESC;
+        ");
         
         $stmt->execute([$id_user]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         return $result;
     }
+    
     public function CountConsultationsTodayByUserId($id_user){
         $currentDate = date('Y-m-d'); // Récupère la date actuelle au format YYYY-MM-DD
         

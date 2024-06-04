@@ -42,11 +42,11 @@
         </div>
         <div class="user">
           <div class="notif" style="cursor: pointer" title="10 Nouvelles notifications">
-            <div class="news">10</div>
-            <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt="" /></a>
+            <div class="news"><?php echo $notif ?></div>
+            <a href="/Bel-Sante/notification"><img src="src/assets/icons/notification.png" height="30px" alt="" /></a>
           </div>
           <div class="profil">
-            <img src=<?php echo $userAdmin['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer" title="Connecté" />
+            <img src="src/assets/logo.png" height="50px" width="50px" style="border-radius: 50%; cursor: pointer" title="Connecté" />
             <p class="name">
               <b>ADMINISTRATEUR</b>
             </p>
@@ -172,7 +172,7 @@
         <span class="close" onclick="closeModal2()">&times;</span>
       </div>
 
-      <form action="/Bel-Sante/newsp" method="post">
+      <form action="/Bel-Sante/newsp" method="post" enctype="multipart/form-data">
         <div class="formulaire">
           <div class="">
             <h3>Médecin</h3>
@@ -324,7 +324,7 @@
                     },
                 ],
             };
-
+       
             const config = {
                 type: "line",
                 data: data,

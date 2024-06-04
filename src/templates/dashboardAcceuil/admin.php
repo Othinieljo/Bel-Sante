@@ -35,7 +35,7 @@
                 </div>
                 <div class="user">
                     <div class="profil">
-                        <img src=<?php echo $userAcceuil['photourl']; ?>   height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
+                        <img src="src/assets/logo.png"    height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
                         <p class="name"><b>ACCUEIL</b><br>dashbord</p>
                     </div>
                     <div class="deconnection">
@@ -93,6 +93,7 @@
                                     <th>Lieu de résidence</th>
                                     <th>Contact</th>
                                     <th>Statut dossier</th>
+                                    <th>Actions</th>
                                 </tr>
                                 <?php for ($i = 0; $i < min(10, count($dossiers)); $i++) : ?>
                                 <?php $dossier = $dossiers[$i]; ?>
@@ -114,9 +115,20 @@
                                             <?php endif; ?>
                                         </div>
                                     </td>
+                                    
+                                    <td>
+                                        <?php if (!$dossier['STATUT']) : ?>
+                                        <a href="/Bel-Sante/printconsult?n=<?php echo $dossier['IDCONSULTATION']; ?>" style="color:blue;" ><u>Imprimer le recu de consulation</u></a><br>
+                                        <?php if ($dossier['NECESSITER_EXISTS']) : ?>
+                                        <a href="/Bel-Sante/printexam?n=<?php echo $dossier['IDCONSULTATION']; ?>" style="color:blue;"><u>Imprimer le recu d'examen</u></a>
+                                        <?php endif; ?>
+                                        <?php endif; ?>
+                                    </td>
+                                    
                                     </tr>
                                 <?php endfor; ?>
                                 <tr>
+                                    <td>-</td>
                                     <td>-</td>
                                     <td>-</td>
                                     <td>-</td>

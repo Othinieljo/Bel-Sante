@@ -31,12 +31,12 @@
                 </div>
                 <div class="user">
                     <div class="notif" style="cursor: pointer;" title="10 Nouvelles notifications">
-                        <div class="news">10</div>
-                        <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt=""></a>
+                        <div class="news"><?php echo $notif ?></div>
+                        <a href="/Bel-Sante/notification"><img src="src/assets/icons/notification.png" height="30px" alt=""></a>
                     </div>
                     <div class="profil">
-                        <img src=src=<?php echo $userServ['photourl']?>  height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
-                        <p class="name"><b>RADIOLOGIE</b><br>dashbord</p>
+                        <img src="src/assets/logo.png"  height="50px" width="50px" style="border-radius: 50%; cursor: pointer;" style="border-radius: 50%;" title="Connecté">
+                        <p class="name"><b><?php echo $serv['NOMSERVICE'] ?></b><br>dashbord</p>
                     </div>
                     <div class="deconnection">
                         <a href="/Bel-Sante/logout">
@@ -56,7 +56,7 @@
                         <div class="recap">
                             <div>
                                 <span style="font-size: 20px; color: gray;">Rendez-vous <br>d'aujourd'hui</span><br><br>
-                                <b style="font-size: 40px;">20</b>
+                                <b style="font-size: 40px;"><?php echo $nbres_consultation ?></b>
                             </div>
                             <img src="src/assets/icons/rendez-vous.png" height="85px" alt="">
                         </div>
@@ -76,10 +76,10 @@
                         </div>
                     </div>  
                     
-                    <div class="notifications">
+                    <!-- <div class="notifications">
                         <h3>Notifications</h3>
                         <div>Nouveau patient ajouté</div>
-                    </div>
+                    </div> -->
     
                     <div class="historique">
                         <h3>Ajout réçent</h3>

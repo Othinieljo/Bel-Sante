@@ -31,6 +31,14 @@ class Service{
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
+    public function GetServiceByServ($IDSERVICE){
+        $stmt = $this->connection->getConnection()->prepare("
+        SELECT * FROM SERVICE WHERE IDSERVICE = ?
+        ");
+        $stmt->execute([$IDSERVICE]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
     public function GetNecessiterbyUserId($id_user) {
         $stmt = $this->connection->getConnection()->prepare("
             SELECT N.*,

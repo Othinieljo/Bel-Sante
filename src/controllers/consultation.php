@@ -3,6 +3,8 @@ require_once('src/models/consultation.php');
 require_once('src/models/participer.php');
 require_once('src/models/necessiter.php');
 require_once('src/models/dossier.php');
+require_once('src/models/service.php');
+require_once('src/models/notification.php');
 require_once('src/models/exam_comp.php');
 require_once('session.php');
 
@@ -20,34 +22,72 @@ function NewConsultation(array $input){
     $acte_medical = $input['acte_medical'] ?? '';
     $constantes = $input['constantes'] ?? '';
     $examen_complementaire = $input['examen_complementaire'];
-    $date_controle = $input['date_controle'] ?? '';
+    $date_controle = $input['date_controle'] ;
     $observation = $input['observation'] ?? '';
     $numerodossier = $input['numerodossier']; 
+    
     $consultation = new Consultation();
+    $notification = new Notification();
+    $services = new Service();
+    $exam_comp = new EXAMENCOMPLEMENTAIRE();
     try {
         $dossier->connection = new DataBaseConnection();
         $consultation->connection = new DataBaseConnection();
-        $res = $consultation->UpdateConsultation($numerodossier,$diagnostic,$prescription,$acte_medical,$date_controle,$observation,$constantes);
-        if ($res){
-            $dossier->UpdateStatus($numerodossier,0);
-            if(!empty($examen_complementaire)){
-                $necessiter = new Necessiter();
-                try{
-                    $necessiter->connection = new DataBaseConnection();
-                    $date_today = date('Y-m-d');
-                    $necessiter->NewNecessiter($idconsultation,$examen_complementaire,$date_today,null,null);
+        $notification->connection = new DataBaseConnection();
+        $services->connection = new DataBaseConnection();
+        $exam_comp->connection = new DataBaseConnection();
+        
+        
+        // $res = $consultation->UpdateConsultation($numerodossier,$diagnostic,$prescription,$acte_medical,$date_controle,$observation,$constantes);
+        if ($date_controle){
+            $res = $consultation->UpdateConsultation($numerodossier,$diagnostic,$prescription,$acte_medical,$date_controle,$observation,$constantes);
 
-                }catch(Exception $e){
-                    echo "Une nouvelle erreur est survenu".$e->getMessage();
-                }
+        }else{
+             $res = $consultation->UpdateConsultation($numerodossier,$diagnostic,$prescription,$acte_medical,NULL,$observation,$constantes);;
+        }
+        
+        if ($res){
+            
+            $doss = $dossier->UpdateStatus($numerodossier,0);
+            if ($doss){
+                if(!empty($examen_complementaire)){
+                    $necessiter = new Necessiter();
+                    try{
+                        $necessiter->connection = new DataBaseConnection();
+                        $date_today = date('Y-m-d');
+                        // $service = $exam_comp->GetExamByIDEXAME($examen_complementaire);
+                        // $serv = $services->GetServiceByServ($service['IDSERVICE']);
+                        // $notif = $notification->SendNotification($serv['id_user'],"Nouveau patient ajoute");
+                       
+                            $necessiter->NewNecessiter($idconsultation,$examen_complementaire,$date_today,null,null);
+                           
+                           
+    
+                       
+                        
+    
+                        
+    
+                    }catch(Exception $e){
+                        // echo "Une nouvelle erreur est survenu".$e->getMessage();
+                    }
+    
 
             }
+           
+            
+            }else{
+                
+            }
+            
             header("Location: /Bel-Sante/admin");
             
+        }else{
+           
         }
 
     } catch (Exception $e) {
-        echo "Une nouvelle erreur est survenue " . $e->getMessage(); // Correction de "survenu" -> "survenue" et ajout d'un espace après "survenue"
+        // echo "Une nouvelle erreur est survenue " . $e->getMessage(); // Correction de "survenu" -> "survenue" et ajout d'un espace après "survenue"
     }
 }
 
@@ -59,8 +99,17 @@ function consultationpage($numerodossier){
     $exam_comp = new EXAMENCOMPLEMENTAIRE();
     $dossier = new Dossier();
     $participer = new Participer();
+    $user = new User();
+    $userS = new Specialiste();
 
     try{
+        $user->connection = new DataBaseConnection();
+        $userSpe= $user->GetUserByID($_SESSION['id_user']);
+        $userS->connection = new DataBaseConnection();
+        $specialiste = $userS->GetSpecialisteByUserId($_SESSION['id_user']);
+
+        $urlComplet = $userSpe['photourl'];
+        $url = str_replace("/opt/lampp/htdocs/Bel-Sante/", "", $urlComplet);
         $participer->connection = new DataBaseConnection();
         $dossier->connection = new DataBaseConnection();
         $dossiers = $participer->GetDossierByUserId($_SESSION['id_user']);

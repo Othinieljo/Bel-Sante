@@ -36,4 +36,13 @@ class EXAMENCOMPLEMENTAIRE{
 
     }
     // public function UpdateExam($ID)
+    public function GetExamByIDEXAME($IDEXAMCOMPL){
+        $stmt = $this->connection->getConnection()->prepare("SELECT * FROM EXAMENCOMPLEMENTAIRE WHERE IDEXAMCOMPL = ?");
+         
+        $stmt->execute([$IDEXAMCOMPL]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result;
+
+    }
 }

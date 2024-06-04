@@ -6,7 +6,7 @@
   font-family: poppins;
   scroll-behavior: smooth;
 }
-.oblige{
+.oblige {
   color: red;
   font-weight: 700;
   font-size: 20px;
@@ -20,7 +20,7 @@ a {
   width: 100%;
   background-color: #abacaf25;
 }
-.search_input{
+.search_input {
   position: relative;
   cursor: text;
   font-size: 14px;
@@ -207,7 +207,8 @@ a {
   width: 100%;
 }
 
-.notifications td, th {
+.notifications td,
+th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
@@ -333,4 +334,19 @@ textarea:hover {
 .dim {
   width: 90%;
   margin: auto;
+}
+
+.dossier {
+  background-color: white;
+  height: 77vh;
+  overflow-y: scroll;
+  padding: 1rem;
+}
+.dossier table tr th,
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  width: 233px;
+  height: 60px;
 }

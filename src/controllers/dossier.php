@@ -6,6 +6,7 @@ require_once('src/models/exam_comp.php');
 require_once('src/models/specialiste.php');
 require_once('src/models/consultation.php');
 require_once('src/models/participer.php');
+require_once('src/models/notification.php');
 require_once('session.php');
 
 function NewDossier(array $input){
@@ -23,24 +24,36 @@ function NewDossier(array $input){
     $antecedents = $input['antecedants'] ?? null;
     $habitation = $input['habitation'] ?? null;
     $specialiste = $input['specialiste'] ?? null;
-
+    $notification = new Notification();
     $dossier = new Dossier($nom, $prenom, $datenaissance, $lieunaissance, $sexe, $profession, $contact, $email, $groupesanguin, $antecedents, $habitation,null);
 
+    $specialistes = new Specialiste();
     try{
         $dossier->connection = new DataBaseConnection();
-        $result = $dossier->NewDossier($nom, $prenom, $datenaissance, $lieunaissance, $sexe, $profession, $contact, $email, $groupesanguin, $antecedents, $habitation);
+        $notification->connection = new DataBaseConnection();
+        $specialistes->connection = new DataBaseConnection();
+        $spe = $specialistes->GetSpecialisteBySpe($specialiste);
+        $notification->SendNotification($spe['id_user'],"Nouveau patient ajoute");
+        if ($notification){
+            $result = $dossier->NewDossier($nom, $prenom, $datenaissance, $lieunaissance, $sexe, $profession, $contact, $email, $groupesanguin, $antecedents, $habitation);
         
-        $lastInsertId = $dossier->connection->getConnection()->lastInsertId();
-        $date_today = date('Y-m-d');
-        $heure_today = date('H');
-        $consultation = new Consultation($lastInsertId,null,null,null,$date_today,null,null);
-        $consultation->connection = new DataBaseConnection();
-        $consult = $consultation->NewConsultation($lastInsertId,null,null,null,$date_today,$heure_today,null,null);
-        $partciper = new Participer();
-        $lastInsertIdP = $consultation->connection->getConnection()->lastInsertId();
-        $partciper->connection = new DataBaseConnection();
+            $lastInsertId = $dossier->connection->getConnection()->lastInsertId();
+            $date_today = date('Y-m-d');
+            $heure_today = date('H:i:s');
+            $consultation = new Consultation($lastInsertId,null,null,null,$date_today,null,null);
+            $consultation->connection = new DataBaseConnection();
+            $consult = $consultation->NewConsultation($lastInsertId,null,null,null,$date_today,$heure_today,null,null,null);
+            
+            $partciper = new Participer();
+            $lastInsertIdP = $consultation->connection->getConnection()->lastInsertId();
+            $partciper->connection = new DataBaseConnection();
 
-        $particip = $partciper->NewParticipation($lastInsertIdP,$specialiste,null);
+            $particip = $partciper->NewParticipation($lastInsertIdP,$specialiste,null);
+        
+
+        }else{
+            // echo "Erreur";
+        }
         
 
         
@@ -55,7 +68,7 @@ function NewDossier(array $input){
         }
     } catch (Exception $e){
         // Gestion des erreurs de connexion à la base de données
-        echo "Une nouvelle erreur est survenu ".$e->getMessage();
+        // echo "Une nouvelle erreur est survenu ".$e->getMessage();
     }
 }
 function AddConsultation(array $input){
@@ -64,13 +77,18 @@ function AddConsultation(array $input){
     $consultation = new Consultation();
     $partciper = new Participer();
     $dossier = new Dossier();
+    $notification = new Notification();
+    $specialistes = new Specialiste();
     try{
         $date_today = date('Y-m-d');
         date_default_timezone_set('Africa/Abidjan');
-
+        $notification->connection = new DataBaseConnection();
+        $specialistes->connection = new DataBaseConnection();
         $heure_today = date('H:i:s');
         $consultation->connection = new DataBaseConnection();
         $consult = $consultation->NewConsultationC($numerodossier,$date_today,$heure_today);
+        $spe = $specialistes->GetSpecialisteBySpe($specialiste);
+        $notification->SendNotification($spe['id_user'],"Nouveau patient ajoute");
         
             $partciper->connection = new DataBaseConnection();
             $lastInsertIdP = $consultation->connection->getConnection()->lastInsertId();
@@ -83,7 +101,7 @@ function AddConsultation(array $input){
         
             header("Location: /Bel-Sante/patient");
     }catch(Exception $e){
-        echo "Une nouvelle erreur est survenu".$e->getMessage();
+        // echo "Une nouvelle erreur est survenu".$e->getMessage();
     }
     
 }
@@ -114,7 +132,7 @@ function dossierpage($numerodossier){
     
 
     }catch(Exception $e){
-        echo "Une nouvelle erreur est survenu".$e->getMessage();
+        // echo "Une nouvelle erreur est survenu".$e->getMessage();
 
     }
 
@@ -132,7 +150,7 @@ function PutNecessiter(array $input){
 
     }
     catch(Exception $e){
-        echo "Une nouvelle erreur est survenu".$e->getMessage();
+        // echo "Une nouvelle erreur est survenu".$e->getMessage();
     }
     header("Location: /Bel-Sante/patient");
 
@@ -142,11 +160,13 @@ function NewExam(array $input){
     $examen = $input['exam'] ;
 
     $exam = new EXAMENCOMPLEMENTAIRE();
+    
     try{
         $exam->connection = new DataBaseConnection();
         $exam->NewExamen($idservice,$examen);
     }catch(Exception $e){
         echo "Une nouvelle erreur est survenu".$e->getMessage();
+       
     }
     header("Location: /Bel-Sante/admin");
 

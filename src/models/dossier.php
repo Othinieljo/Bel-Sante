@@ -49,7 +49,27 @@ public function GetAllDossiers(){
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     return $result;
+} 
+public function GetAllDossiersAndConsult() {
+    $stmt = $this->connection->getConnection()->prepare("
+        SELECT D.*, C.*
+        FROM DOSSIER D
+        JOIN CONSULTATION C ON D.NUMERODOSSIER = C.NUMERODOSSIER
+        WHERE C.IDCONSULTATION = (
+            SELECT MAX(C2.IDCONSULTATION)
+            FROM CONSULTATION C2
+            WHERE C2.NUMERODOSSIER = D.NUMERODOSSIER
+        )
+        ORDER BY D.NUMERODOSSIER;
+    ");
+     
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    return $result;
 }
+
+
 public function GetDossiersByNom($nom){
     $stmt = $this->connection->getConnection()->prepare("SELECT * FROM DOSSIER WHERE NOM = ?");
     

@@ -25,13 +25,23 @@ class Necessiter{
         }
         
     }
-    public function GetNecessiterByConsultation($IDCONSULTATION){
-        $stmt = $this->connection->getConnection()->prepare("SELECT * FROM NECESSITER WHERE IDCONSULTATION = ?");
+    public function GetNecessiterByConsultation($IDCONSULTATION) {
+        $stmt = $this->connection->getConnection()->prepare("
+            SELECT N.*, C.*, D.*, E.*
+            FROM NECESSITER N
+            JOIN CONSULTATION C ON N.IDCONSULTATION = C.IDCONSULTATION
+            JOIN DOSSIER D ON C.NUMERODOSSIER = D.NUMERODOSSIER
+            JOIN EXAMENCOMPLEMENTAIRE E ON N.IDEXAMENCOMPL = E.IDEXAMENCOMPL
+            WHERE N.IDCONSULTATION = ?
+        ");
+        
         $stmt->execute([$IDCONSULTATION]);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
         return $result;
     }
+    
+    
     public function UpdateNecessiterBy($IDCONSULTATION,$RESULTATS){
 
         $stmt = $this->connection->getConnection()->prepare("

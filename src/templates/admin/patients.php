@@ -36,11 +36,11 @@
                 </div>
                 <div class="user">
                     <div class="notif" style="cursor: pointer" title="10 Nouvelles notifications">
-                        <div class="news">10</div>
+                        <div class="news"><?php echo $notif ?></div>
                         <a href="#notifications"><img src="src/assets/icons/notification.png" height="30px" alt="" /></a>
                     </div>
                     <div class="profil">
-                        <img src=<?php echo $userAdmin['photourl']?> height="50px" width="50px" style="border-radius: 50%; cursor: pointer" title="Connecté" />
+                        <img src="src/assets/logo.png" height="50px" width="50px" style="border-radius: 50%; cursor: pointer" title="Connecté" />
                         <p class="name">
                         <b>ADMINISTRATEUR</b>
                         </p>
